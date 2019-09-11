@@ -58,7 +58,12 @@ void Bzero(char *start, unsigned int max){
 	}
 }
 
-code a MemCpy() function to copy a memory region located at a given
+/*code a MemCpy() function to copy a memory region located at a given
 character pointer 'dst,' from the starting location at a given character
-pointer 'src,' the size will also be given as an unsigned integer 'max'
-
+pointer 'src,' the size will also be given as an unsigned integer 'max'*/
+void MemCpy(char *dst, char *src, unsigned int max){
+	int x;
+	for (x = 0; x < max; x++){
+	   dst[x] = src[x];
+	}
+}
