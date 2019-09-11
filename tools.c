@@ -1,9 +1,17 @@
 // tools.c, 159
 
-this .c code needs to include spede.h, const-type.h, and ext-data.h
+//this .c code needs to include spede.h, const-type.h, and ext-data.h
+#include "spede.h"
+#include "const-type.h"
+#include "ext-data.h"
 
-code a QueEmpty() function that checks whether a queue (located by a
-given pointer) is emptyr; returns 1 if yes, or 0 if not
+/*code a QueEmpty() function that checks whether a queue (located by a
+given pointer) is emptyr; returns 1 if yes, or 0 if not*/
+
+bool QueEmpty(que_t q){
+   if (q.tail == 0) return true;
+   else return false;
+}
 
 similarly, code a QueFull() function to check for being full or not
 
