@@ -47,10 +47,16 @@ void EnQue(int num, que_t *q){
    q.tail++;   
 }
 
-code a Bzero() function to clear a memory region (by filling with NUL
+/*code a Bzero() function to clear a memory region (by filling with NUL
 characters), the beginning of the memory location will be given via a
 character pointer, and the size of the memory will be given by an unsigned
-int 'max'
+int 'max'*/
+void Bzero(char *start, unsigned int max){
+	int x;
+	for (x = 0; x < max; x++){
+	   start[x] = NULL;
+	}
+}
 
 code a MemCpy() function to copy a memory region located at a given
 character pointer 'dst,' from the starting location at a given character
