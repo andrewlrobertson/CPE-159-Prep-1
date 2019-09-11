@@ -15,18 +15,26 @@ int QueEmpty(que_t *q){
 
 /*similarly, code a QueFull() function to check for being full or not*/
 int QueFull(que_t *q){
-   if (q.tail == (QUE_MAX-1)) return 1;
+   if (q.tail == (QUE_MAX)) return 1;
    return 0;
 }
 
 code a DeQue() function that dequeues the 1st number in the queue (given
 by a pointer); if empty, return constant NONE (-1)
 
-code an EnQue() function given a number and a queue (by a pointer), it
+/*code an EnQue() function given a number and a queue (by a pointer), it
 appends the number to the tail of the queue, or shows an error message
 and go into the GDB:
       cons_printf("Panic: queue is full, cannot EnQue!\n");
+      breakpoint();*/
+void EnQue(int num, que_t *q){
+   if (QueFull(q)){
+      cons_printf("Panic: queue is full, cannot EnQue!\n");
       breakpoint();
+   }
+   q.que[q.tail] = num;
+   q.tail++;   
+}
 
 code a Bzero() function to clear a memory region (by filling with NUL
 characters), the beginning of the memory location will be given via a

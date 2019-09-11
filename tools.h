@@ -8,6 +8,6 @@
 //...
 int QueEmpty(que_t *q);
 int QueFull(que_t *q);
-
+void EnQue(int num, que_t *q);
 #endif
 
