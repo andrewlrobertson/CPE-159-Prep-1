@@ -23,16 +23,42 @@ typedef void (*func_p_t)(void); // void-return function pointer type
 
 typedef enum {AVAIL, READY, RUN} state_t;
 
-define a trapframe type (tf_t) that has these 'unsigned int'
-      eax, ecx, edx, ebx, esp, ebp, esi, edi, eip, cs, efl
+/*define a trapframe type (tf_t) that has these 'unsigned int'
+      eax, ecx, edx, ebx, esp, ebp, esi, edi, eip, cs, efl*/
 
-define a PCB type (pcb_t) that has 
+typedef trapframe tf_t {
+   unsigned int eax;
+   unsigned int ecx;
+   unsigned int edx;
+   unsigned int ebx;
+   unsigned int esp;
+   unsigned int ebp;
+   unsigned int esi;
+   unsigned int edi;
+   unsigned int eip;
+   unsigned int cs;
+   unsigned int efl;
+}
+
+/*define a PCB type (pcb_t) that has 
    state_t state
    tf_t *tf_p
-   unsigned int time_count and total_time
+   unsigned int time_count and total_time*/
+   
+typedef PCB pcb_t {
+   state_t state;
+   tf_t *tf_p;
+   unsigned int time_count;
+   unsigned int total_time;
+}
 
-define a queue type (que_t) that has an integer 'tail' and an integer
-array 'que' in it, the dimension of 'que' is QUE_MAX
+/*define a queue type (que_t) that has an integer 'tail' and an integer
+array 'que' in it, the dimension of 'que' is QUE_MAX*/
+
+typedef queue que_t {
+   int tail;
+   int que[QUE_MAX];
+}
 
 #endif                          // to prevent name mangling
 
