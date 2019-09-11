@@ -10,10 +10,14 @@ given pointer) is emptyr; returns 1 if yes, or 0 if not*/
 
 bool QueEmpty(que_t q){
    if (q.tail == 0) return true;
-   else return false;
+   return false;
 }
 
-similarly, code a QueFull() function to check for being full or not
+/*similarly, code a QueFull() function to check for being full or not*/
+bool QueFull(que_t q){
+   if (q.tail == (QUE_MAX-1)) return true;
+   return false;
+}
 
 code a DeQue() function that dequeues the 1st number in the queue (given
 by a pointer); if empty, return constant NONE (-1)

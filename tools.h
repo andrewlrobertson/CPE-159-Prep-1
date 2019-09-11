@@ -7,6 +7,7 @@
 
 //...
 bool QueEmpty(que_t q);
+bool QueFull(que_t q);
 
 #endif
 
