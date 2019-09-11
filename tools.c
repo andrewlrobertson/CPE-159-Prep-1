@@ -8,15 +8,15 @@
 /*code a QueEmpty() function that checks whether a queue (located by a
 given pointer) is emptyr; returns 1 if yes, or 0 if not*/
 
-bool QueEmpty(que_t q){
-   if (q.tail == 0) return true;
-   return false;
+int QueEmpty(que_t q){
+   if (q.tail == 0) return 1;
+   return 0;
 }
 
 /*similarly, code a QueFull() function to check for being full or not*/
-bool QueFull(que_t q){
-   if (q.tail == (QUE_MAX-1)) return true;
-   return false;
+int QueFull(que_t q){
+   if (q.tail == (QUE_MAX-1)) return 1;
+   return 0;
 }
 
 code a DeQue() function that dequeues the 1st number in the queue (given
