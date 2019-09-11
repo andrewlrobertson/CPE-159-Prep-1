@@ -8,13 +8,13 @@
 /*code a QueEmpty() function that checks whether a queue (located by a
 given pointer) is emptyr; returns 1 if yes, or 0 if not*/
 
-int QueEmpty(que_t q){
+int QueEmpty(que_t *q){
    if (q.tail == 0) return 1;
    return 0;
 }
 
 /*similarly, code a QueFull() function to check for being full or not*/
-int QueFull(que_t q){
+int QueFull(que_t *q){
    if (q.tail == (QUE_MAX-1)) return 1;
    return 0;
 }
