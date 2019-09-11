@@ -19,8 +19,19 @@ int QueFull(que_t *q){
    return 0;
 }
 
-code a DeQue() function that dequeues the 1st number in the queue (given
-by a pointer); if empty, return constant NONE (-1)
+/*code a DeQue() function that dequeues the 1st number in the queue (given
+by a pointer); if empty, return constant NONE (-1)*/
+int DeQue(que_t *q){
+   if (QueEmpty(q))return NONE;
+   int head_num = q.que[0];
+   int x;
+   for (x = 0; x < q.tail-1; x++){
+      q.que[x] = q.que[x+1];
+   }
+   q.tail--;
+   q.que[q.tail] = NULL;
+   return head_num;
+}
 
 /*code an EnQue() function given a number and a queue (by a pointer), it
 appends the number to the tail of the queue, or shows an error message
