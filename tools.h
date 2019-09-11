@@ -6,6 +6,7 @@
 #include "const-type.h" // need definition of 'que_t' below
 
 //...
+bool QueEmpty(que_t q);
 
 #endif
 
