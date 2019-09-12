@@ -54,7 +54,7 @@ int 'max'*/
 void Bzero(char *start, unsigned int max){
 	int x;
 	for (x = 0; x < max; x++){
-	   start[x] = NULL;
+	   start[x] = '\0';
 	}
 }
 
