@@ -9,13 +9,13 @@
 given pointer) is emptyr; returns 1 if yes, or 0 if not*/
 
 int QueEmpty(que_t *q){
-   if (q.tail == 0) return 1;
+   if (q->tail == 0) return 1;
    return 0;
 }
 
 /*similarly, code a QueFull() function to check for being full or not*/
 int QueFull(que_t *q){
-   if (q.tail == (QUE_MAX)) return 1;
+   if (q->tail == (QUE_MAX)) return 1;
    return 0;
 }
 
@@ -25,11 +25,11 @@ int DeQue(que_t *q){
    if (QueEmpty(q))return NONE;
    int head_num = q.que[0];
    int x;
-   for (x = 0; x < q.tail-1; x++){
-      q.que[x] = q.que[x+1];
+   for (x = 0; x < q->tail-1; x++){
+      q->que[x] = q->que[x+1];
    }
-   q.tail--;
-   q.que[q.tail] = NULL;
+   q->tail--;
+   q->que[q->tail] = NULL;
    return head_num;
 }
 
@@ -43,8 +43,8 @@ void EnQue(int num, que_t *q){
       cons_printf("Panic: queue is full, cannot EnQue!\n");
       breakpoint();
    }
-   q.que[q.tail] = num;
-   q.tail++;   
+   q->que[q->tail] = num;
+   q->tail++;   
 }
 
 /*code a Bzero() function to clear a memory region (by filling with NUL
