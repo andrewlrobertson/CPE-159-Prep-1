@@ -1,6 +1,9 @@
 // kernel.c, 159, phase 1
 //
-// Team Name: ??????? (Members: ??????...)
+// Team Name: Please_give_us_an_A 
+// Members:   Halterman, Ehsan
+//            Johnson, Kaicha
+//            Robertson, Andrew
 
 #include "spede.h"
 #include "const-type.h"
