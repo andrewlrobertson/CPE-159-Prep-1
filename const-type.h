@@ -26,7 +26,7 @@ typedef enum {AVAIL, READY, RUN} state_t;
 /*define a trapframe type (tf_t) that has these 'unsigned int'
       eax, ecx, edx, ebx, esp, ebp, esi, edi, eip, cs, efl*/
 
-typedef trapframe tf_t {
+typedef struct{
    unsigned int eax;
    unsigned int ecx;
    unsigned int edx;
@@ -38,27 +38,27 @@ typedef trapframe tf_t {
    unsigned int eip;
    unsigned int cs;
    unsigned int efl;
-}
+} tf_t;
 
 /*define a PCB type (pcb_t) that has 
    state_t state
    tf_t *tf_p
    unsigned int time_count and total_time*/
    
-typedef PCB pcb_t {
+typedef struct{
    state_t state;
    tf_t *tf_p;
    unsigned int time_count;
    unsigned int total_time;
-}
+} pcb_t;
 
 /*define a queue type (que_t) that has an integer 'tail' and an integer
 array 'que' in it, the dimension of 'que' is QUE_MAX*/
 
-typedef queue que_t {
+typedef struct{
    int tail;
    int que[QUE_MAX];
-}
+} que_t;
 
 #endif                          // to prevent name mangling
 
