@@ -1,9 +1,11 @@
 // proc.c, 159
 // processes are coded here
 
-need to include const-type.h and ext-data.h
+//need to include const-type.h and ext-data.h
+#include "ext-data.h"
+#include "const-type.h"
 
-Code an Idle() function that doesn't have any input or return, but just
+/*Code an Idle() function that doesn't have any input or return, but just
 flickers the dot symbol at the upper-left corner of the target PC display.
 
 It reads sys_time_count and at each second interval writes '.' or ' ' via
@@ -15,5 +17,8 @@ boldface writing.
     in an infinite loop:
        whenever the system time reaches a multiple of 100 (per 1 second):
           a. judging from the flag and show either the dot or space
-          b. alternate the flag
+          b. alternate the flag*/
 
+void Idle(void){
+   int dotOrNot = 0;
+}
