@@ -28,12 +28,19 @@ struct i386_gate *idt;         // interrupt descriptor table
 void BootStrap(void) {         // set up kernel!
    //set sys time count to zero
 	sys_time_count = 0;
+	int x;
 
-   call tool Bzero() to clear avail queue
-   call tool Bzero() to clear ready queue
-   enqueue all the available PID numbers to avail queue
+   //call tool Bzero() to clear avail queue
+   Bzero((char *)avail_que, sizeof(que_t));
+   //call tool Bzero() to clear ready queue
+   Bzero((char *)ready_que, sizeof(que_t));
+   //enqueue all the available PID numbers to avail queue
+   for(x = 0; x < PROC_MAX; x++){
+      EnQue(x, avail_que);
+   }
 
-   get IDT location
+   //get IDT location
+   idt = get_idt_base();
    addr of TimerEntry is placed into proper IDT entry
    send PIC control register the mask value for timer handling
 }
