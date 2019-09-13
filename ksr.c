@@ -34,13 +34,16 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
    //if 'pid' is not IDLE, use a tool function to enqueue it to the ready queue
    if(pid != IDLE) EnQue(pid, ready_que);  
 
-  // use a tool function to copy from 'p' to DRAM_START, for STACK_MAX bytes
-	   MemCpy(char*)DRAM_START, (char*)IDLE, STACK_MAX);
+   //use a tool function to copy from 'p' to DRAM_START, for STACK_MAX bytes
+   MemCpy(char*)DRAM_START, (char*)IDLE, STACK_MAX);
 
    //create trapframe for process 'pid:'
+
+   
+   //1st position trapframe pointer in its PCB to the end of the stack
    pcb[pid].tf_p = (tf_t*)(DRAM_START + STACK_MAX - sizeof(tf_t));
-   1st position trapframe pointer in its PCB to the end of the stack
-	   //set efl in trapframe to EF_DEFAULT_VALUE|EF_INTR  // handle intr
+   
+   //set efl in trapframe to EF_DEFAULT_VALUE|EF_INTR  // handle intr
    pcb[pid].tf_p->efl = EF_DEFAULT_VALUE | EF_INTR;
    //set cs in trapframe to return of calling get_cs() // duplicate from CPU
    pcb[pid].tf_p->cs = get_cs();
