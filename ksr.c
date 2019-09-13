@@ -28,7 +28,8 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
    use a tool function to clear the content of PCB of process 'pid'
    set the state of the process 'pid' to READY
 
-   if 'pid' is not IDLE, use a tool function to enqueue it to the ready queue 
+   //if 'pid' is not IDLE, use a tool function to enqueue it to the ready queue
+   if(pid != IDLE) EnQue(pid, ready_que);  
 
   // use a tool function to copy from 'p' to DRAM_START, for STACK_MAX bytes
 	   MemCpy(char*)DRAM_START, (char*)IDLE, STACK_MAX);
