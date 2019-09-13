@@ -52,8 +52,8 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
 
 // count run time and switch if hitting time limit
 void TimerSR(void) {
-   1st notify PIC control register that timer event is now served
-
+   //1st notify PIC control register that timer event is now served
+   outportb(PIC_CONT_REG, TIMER_SERVED_VAL);
    //increment system time count by 1
    sys_time_count++;
    //increment the time count of the process currently running by 1
