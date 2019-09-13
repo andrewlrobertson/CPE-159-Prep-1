@@ -5,6 +5,8 @@
 #include "ext-data.h"
 #include "const-type.h"
 
+
+
 /*Code an Idle() function that doesn't have any input or return, but just
 flickers the dot symbol at the upper-left corner of the target PC display.
 
@@ -19,6 +21,17 @@ boldface writing.
           a. judging from the flag and show either the dot or space
           b. alternate the flag*/
 
-void Idle(void){
-   int dotOrNot = 0;
+void Idle(void){  
+   int flag = 0;
+	while(1){
+		if(sys_time_count % 100 == 0) {
+			if(flag == 0) {
+				*upper_left_pos = '.' + VGA_MASK_VAL;
+				flag = 1;
+			} else {
+				*upper_left_pos = ' ' + VGA_MASK_VAL;
+				flag = 0;
+			}
+		}
+	}
 }
