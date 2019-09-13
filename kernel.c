@@ -13,15 +13,20 @@
 #include "proc.h"     // all user process code here
 
 // declare kernel data
-declare an integer: run_pid;  // current running PID; if -1, none selected
+//declare an integer: run_pid;  // current running PID; if -1, none selected
+int run_pid;
 declare 2 queues: avail_que and ready_que;  // avail PID and those created/ready to run
-declare an array of PCB type: pcb[PROC_MAX];  // Process Control Blocks
+//declare an array of PCB type: pcb[PROC_MAX];  // Process Control Blocks
+pcb_t pcb[PROC_MAX];
 
-declare an unsigned integer: sys_time_count
+//declare an unsigned integer: sys_time_count
+unsigned int sys_time_count;
+
 struct i386_gate *idt;         // interrupt descriptor table
 
 void BootStrap(void) {         // set up kernel!
-   set sys time count to zero
+   //set sys time count to zero
+	sys_time_count = 0;
 
    call tool Bzero() to clear avail queue
    call tool Bzero() to clear ready queue
