@@ -9,5 +9,7 @@
 
 extern int run_pid;                 // PID of current selected running process
 extern unsigned in sys_time_count;
+extern que_t avail_que;
+extern que_t ready_que;
 
 #endif
