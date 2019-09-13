@@ -38,7 +38,6 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
    MemCpy(char*)DRAM_START, (char*)IDLE, STACK_MAX);
 
    //create trapframe for process 'pid:'
-
    
    //1st position trapframe pointer in its PCB to the end of the stack
    pcb[pid].tf_p = (tf_t*)(DRAM_START + STACK_MAX - sizeof(tf_t));
