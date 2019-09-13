@@ -13,11 +13,18 @@
 void SpawnSR(func_p_t p) {     // arg: where process code starts
    int pid;
 
-   use a tool function to check if available queue is empty:
+   /*use a tool function to check if available queue is empty:
       a. cons_printf("Panic: out of PID!\n");
-      b. and go into GDB
+      b. and go into GDB*/
+	  
+   if( QueEmpty(avail_que) == 1){
+      cons_printf("Panic: out of PID!\n");
+	  breakpoint();
+   }
 
-   get 'pid' initialized by dequeuing the available queue
+   //get 'pid' initialized by dequeuing the available queue
+   pid = DeQue(avail_que);
+   
    use a tool function to clear the content of PCB of process 'pid'
    set the state of the process 'pid' to READY
 
