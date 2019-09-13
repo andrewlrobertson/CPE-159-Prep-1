@@ -25,8 +25,11 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
    //get 'pid' initialized by dequeuing the available queue
    pid = DeQue(avail_que);
    
-   use a tool function to clear the content of PCB of process 'pid'
-   set the state of the process 'pid' to READY
+   //use a tool function to clear the content of PCB of process 'pid'
+   Bzero((char *)pcb[pid], sizeof(pcb_t));
+   
+   //set the state of the process 'pid' to READY
+   pcb[pid].state = READY;
 
    //if 'pid' is not IDLE, use a tool function to enqueue it to the ready queue
    if(pid != IDLE) EnQue(pid, ready_que);  
