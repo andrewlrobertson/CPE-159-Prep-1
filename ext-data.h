@@ -5,9 +5,9 @@
 #ifndef _EXT_DATA_
 #define _EXT_DATA_
 
-#include "...
+#include "kernel.c"
 
 extern int run_pid;                 // PID of current selected running process
-and other extern ...
+extern unsigned in sys_time_count;
 
 #endif
