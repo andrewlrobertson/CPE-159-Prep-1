@@ -54,9 +54,12 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
 void TimerSR(void) {
    1st notify PIC control register that timer event is now served
 
-   increment system time count by 1
-   increment the time count of the process currently running by 1
-   increment the life span count of the process currently running by 1
+   //increment system time count by 1
+   sys_time_count++;
+   //increment the time count of the process currently running by 1
+   pcb[pid].time_count++;
+   //increment the life span count of the process currently running by 1
+   pcb[pid].total_time++;
 
    if the time count of the process is reaching maximum allowed runtime
       move the process back to the ready queue
