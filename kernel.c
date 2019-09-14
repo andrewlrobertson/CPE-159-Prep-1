@@ -48,11 +48,14 @@ void BootStrap(void) {         // set up kernel!
 }
 
 int main(void) {               // OS starts
-   do the boot strap things 1st
+   //do the boot strap things 1st
+   BootStrap();
 
    SpawnSR(Idle);              // create Idle thread
-   set run_pid to IDLE
-   call Loader() to load the trapframe of Idle
+   //set run_pid to IDLE
+   run_pid = IDLE;
+   //call Loader() to load the trapframe of Idle
+   Loader(pcb[run_pid].tf_p);
 
    return 0; // never would actually reach here
 }
