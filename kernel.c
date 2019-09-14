@@ -41,8 +41,10 @@ void BootStrap(void) {         // set up kernel!
 
    //get IDT location
    idt = get_idt_base();
-   addr of TimerEntry is placed into proper IDT entry
-   send PIC control register the mask value for timer handling
+   //addr of TimerEntry is placed into proper IDT entry
+   fill_gate(&idt[TIMER_EVENT], (int)TimerEntry, get_cs(), ACC_INTR_GATE, 0);
+   //send PIC control register the mask value for timer handling
+   outportb(PIC_MASK_REG, PIC_MASK_VAL);
 }
 
 int main(void) {               // OS starts
