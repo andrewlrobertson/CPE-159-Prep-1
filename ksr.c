@@ -17,13 +17,13 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
       a. cons_printf("Panic: out of PID!\n");
       b. and go into GDB*/
 	  
-   if( QueEmpty(avail_que) == 1){
+   if( QueEmpty(&avail_que) == 1){
       cons_printf("Panic: out of PID!\n");
 	  breakpoint();
    }
 
    //get 'pid' initialized by dequeuing the available queue
-   pid = DeQue(avail_que);
+   pid = DeQue(&avail_que);
    
    //use a tool function to clear the content of PCB of process 'pid'
    Bzero((char *)pcb[pid], sizeof(pcb_t));
@@ -32,7 +32,7 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
    pcb[pid].state = READY;
 
    //if 'pid' is not IDLE, use a tool function to enqueue it to the ready queue
-   if(pid != IDLE) EnQue(pid, ready_que);  
+   if(pid != IDLE) EnQue(pid, &ready_que);  
 
    //use a tool function to copy from 'p' to DRAM_START, for STACK_MAX bytes
    MemCpy(char*)DRAM_START, (char*)IDLE, STACK_MAX);

@@ -31,12 +31,12 @@ void BootStrap(void) {         // set up kernel!
 	int x;
 
    //call tool Bzero() to clear avail queue
-   Bzero((char *)avail_que, sizeof(que_t));
+   Bzero((char *)&avail_que, sizeof(que_t));
    //call tool Bzero() to clear ready queue
-   Bzero((char *)ready_que, sizeof(que_t));
+   Bzero((char *)&ready_que, sizeof(que_t));
    //enqueue all the available PID numbers to avail queue
    for(x = 0; x < PROC_MAX; x++){
-      EnQue(x, avail_que);
+      EnQue(x, &avail_que);
    }
 
    //get IDT location
