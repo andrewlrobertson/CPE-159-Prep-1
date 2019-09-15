@@ -75,13 +75,20 @@ void Scheduler(void) {              // choose a run_pid to run
 }
 
 void Kernel(tf_t *tf_p) {       // kernel runs
-   copy tf_p to the trapframe ptr (in PCB) of the process in run
 
-   call the timer service routine
+   char ch;
+   //copy tf_p to the trapframe ptr (in PCB) of the process in run
+   pcb[run_pid].tf_p = tf_p;
 
-   if 'b' key on target PC is pressed, goto the GDB prompt
+   //call the timer service routine
+   TimerSR();
 
-   call Scheduler() to change run_pid if needed
-   call Loader() to load the trapframe of the selected process
+   //if 'b' key on target PC is pressed, goto the GDB prompt
+   if(cons_kbhit() == 1) ch = cons_getchar();
+   if(ch == 'b') breakpoint (); 
+   //call Scheduler() to change run_pid if needed
+   Scheduler();
+   //Call Loader() to load the trapframe of the selected process
+   Loader(); 
 }
 
