@@ -22,6 +22,7 @@ boldface writing.
           b. alternate the flag*/
 
 void Idle(void){  
+   unsigned short *upper_left_pos = (unsigned short *)0xb8000; 
    int flag = 0;
 	while(1){
 		if(sys_time_count % 100 == 0) {
