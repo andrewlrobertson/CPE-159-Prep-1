@@ -26,7 +26,7 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
    pid = DeQue(&avail_que);
    
    //use a tool function to clear the content of PCB of process 'pid'
-   Bzero((char *)pcb[pid], sizeof(pcb_t));
+   Bzero((char *)&pcb[pid], sizeof(pcb_t));
    
    //set the state of the process 'pid' to READY
    pcb[pid].state = READY;
