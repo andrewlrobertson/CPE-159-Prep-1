@@ -27,8 +27,8 @@ struct i386_gate *idt;         // interrupt descriptor table
 
 void BootStrap(void) {         // set up kernel!
    //set sys time count to zero
-	sys_time_count = 0;
 	int x;
+	sys_time_count = 0;
 
    //call tool Bzero() to clear avail queue
    Bzero((char *)&avail_que, sizeof(que_t));
