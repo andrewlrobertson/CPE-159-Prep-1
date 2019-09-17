@@ -25,7 +25,7 @@ int DeQue(que_t *q){
    int x;
    int head_num;
    if (QueEmpty(q))return NONE;
-   head_num = q.que[0];
+   head_num = q->que[0];
    for (x = 0; x < q->tail-1; x++){
       q->que[x] = q->que[x+1];
    }
