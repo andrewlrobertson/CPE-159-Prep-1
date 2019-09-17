@@ -5,7 +5,7 @@
 #ifndef _EXT_DATA_
 #define _EXT_DATA_
 
-#include "kernel.c"
+//#include "kernel.c"
 #include "const-type.h"
 
 extern int run_pid;                 // PID of current selected running process
