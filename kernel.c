@@ -84,8 +84,10 @@ void Kernel(tf_t *tf_p) {       // kernel runs
    TimerSR();
 
    //if 'b' key on target PC is pressed, goto the GDB prompt
-   if(cons_kbhit() == 1) ch = cons_getchar();
-   if(ch == 'b') breakpoint (); 
+   if(cons_kbhit() == 1){
+      ch = cons_getchar();
+      if(ch == 'b') breakpoint ();
+   }
    //call Scheduler() to change run_pid if needed
    Scheduler();
    //Call Loader() to load the trapframe of the selected process
