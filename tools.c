@@ -22,9 +22,10 @@ int QueFull(que_t *q){
 /*code a DeQue() function that dequeues the 1st number in the queue (given
 by a pointer); if empty, return constant NONE (-1)*/
 int DeQue(que_t *q){
-   if (QueEmpty(q))return NONE;
-   int head_num = q.que[0];
    int x;
+   int head_num;
+   if (QueEmpty(q))return NONE;
+   head_num = q.que[0];
    for (x = 0; x < q->tail-1; x++){
       q->que[x] = q->que[x+1];
    }
