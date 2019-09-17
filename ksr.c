@@ -68,7 +68,7 @@ void TimerSR(void) {
       //alter its state to indicate it is not running but ...
 	   pcb[run_pid].state = READY;
       //reset the PID of the process in run to NONE
-	   run_pid == NONE;
+	   run_pid = NONE;
    }
 }
 
