@@ -30,7 +30,7 @@ int DeQue(que_t *q){
       q->que[x] = q->que[x+1];
    }
    q->tail--;
-   q->que[q->tail] = NULL;
+   q->que[q->tail] = NONE;
    return head_num;
 }
 
