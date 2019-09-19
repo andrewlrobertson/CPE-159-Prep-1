@@ -16,7 +16,7 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
    /*use a tool function to check if available queue is empty:
       a. cons_printf("Panic: out of PID!\n");
       b. and go into GDB*/
-	  
+
    if( QueEmpty(&avail_que) == 1){
       cons_printf("Panic: out of PID!\n");
 	  breakpoint();
@@ -24,24 +24,24 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
 
    //get 'pid' initialized by dequeuing the available queue
    pid = DeQue(&avail_que);
-   
+
    //use a tool function to clear the content of PCB of process 'pid'
    Bzero((char *)&pcb[pid], sizeof(pcb_t));
-   
+
    //set the state of the process 'pid' to READY
    pcb[pid].state = READY;
 
    //if 'pid' is not IDLE, use a tool function to enqueue it to the ready queue
-   if(pid != IDLE) EnQue(pid, &ready_que);  
+   if(pid != IDLE) EnQue(pid, &ready_que);
 
    //use a tool function to copy from 'p' to DRAM_START, for STACK_MAX bytes
    MemCpy((char*)DRAM_START, (char*)p, STACK_MAX);
 
    //create trapframe for process 'pid:'
-   
+
    //1st position trapframe pointer in its PCB to the end of the stack
    pcb[pid].tf_p = (tf_t*)(DRAM_START + STACK_MAX - sizeof(tf_t));
-   
+
    //set efl in trapframe to EF_DEFAULT_VALUE|EF_INTR  // handle intr
    pcb[pid].tf_p->efl = EF_DEFAULT_VALUE | EF_INTR;
    //set cs in trapframe to return of calling get_cs() // duplicate from CPU
@@ -62,7 +62,7 @@ void TimerSR(void) {
    pcb[run_pid].total_time++;
 
    //if the time count of the process is reaching maximum allowed runtime
-   if(pcb[run_pid].time_count == TIME_MAX){	   
+   if(pcb[run_pid].time_count == TIME_MAX){
       //move the process back to the ready queue
 	   EnQue(run_pid, &ready_que);
       //alter its state to indicate it is not running but ...
@@ -72,3 +72,14 @@ void TimerSR(void) {
    }
 }
 
+void SysSleep(void) {
+   int sleep_sec;
+   sleep_sec = pcb[run_pid].tf_p->ebx;
+   pcb[run_pid].wake_time = sys_time_count + 100(sleep_sec);
+   pcb[run_pid].state = SLEEP;
+   run_pid = NONE;
+   /*calculate the wake time of the running process using the current system
+   time count plus the sleep_sec times 100
+   alter the state of the running process to SLEEP
+   alter the value of run_pid to NONE*/
+}
