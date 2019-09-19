@@ -14,5 +14,9 @@ extern que_t avail_que;
 extern que_t ready_que;
 extern pcb_t pcb[PROC_MAX];
 extern unsigned short *sys_cursor;  //like others, add the new sys_cursor newly declared in main.c
+extern int sys_get_pid(void);
+extern int sys_get_time(void);
+extern void sys_sleep(int sleep_sec);
+extern void sys_write(char* str);
 
 #endif
