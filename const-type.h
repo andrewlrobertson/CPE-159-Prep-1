@@ -19,13 +19,21 @@
 #define IDLE 0                  // Idle thread PID 0
 #define DRAM_START 0xe00000     // 14 MB
 
+#define SYSCALL_EVENT 128       // syscall event identifier code, phase2
+#define SYS_GET_PID 129         // different types of syscalls
+#define SYS_GET_TIME 130
+#define SYS_SLEEP 131
+#define SYS_WRITE 132
+#define VIDEO_START (unsigned short *)0xb8000
+#define VIDEO_END ((unsigned short *)0xb8000 + 25 * 80)
+
 typedef void (*func_p_t)(void); // void-return function pointer type
 
-typedef enum {AVAIL, READY, RUN} state_t;
+typedef enum {AVAIL, READY, RUN, SLEEP} state_t;   //Add a new state SLEEP to the existing state_t
 
 /*define a trapframe type (tf_t) that has these 'unsigned int'
       eax, ecx, edx, ebx, esp, ebp, esi, edi, eip, cs, efl*/
-
+//Use the new trapframe sequence (entry.S requires alteration):	  
 typedef struct{
    unsigned int eax;
    unsigned int ecx;
@@ -38,6 +46,7 @@ typedef struct{
    unsigned int eip;
    unsigned int cs;
    unsigned int efl;
+   unsigned int event;		// add an 'event' into this, phase2
 } tf_t;
 
 /*define a PCB type (pcb_t) that has 
@@ -50,6 +59,7 @@ typedef struct{
    tf_t *tf_p;
    unsigned int time_count;
    unsigned int total_time;
+   unsigned int wake_time;              //Add an unsigned int wake_time to the PCB type
 } pcb_t;
 
 /*define a queue type (que_t) that has an integer 'tail' and an integer
@@ -61,4 +71,3 @@ typedef struct{
 } que_t;
 
 #endif                          // to prevent name mangling
-
