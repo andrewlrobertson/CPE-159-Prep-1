@@ -21,13 +21,13 @@ boldface writing.
           a. judging from the flag and show either the dot or space
           b. alternate the flag*/
 
-void Idle(void){  
-   unsigned short *upper_left_pos = (unsigned short *)0xb8000; 
+void Idle(void){
+   unsigned short *upper_left_pos = (unsigned short *)0xb8000;
    int flag = 0;
 	while(1){
 		if(sys_time_count % 100 == 0) {
 			if(flag == 0) {
-				*upper_left_pos = '.' + VGA_MASK_VAL;
+				*upper_left_pos = '*' + VGA_MASK_VAL;
 				flag = 1;
 			} else {
 				*upper_left_pos = ' ' + VGA_MASK_VAL;
