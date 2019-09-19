@@ -7,5 +7,6 @@
 
 void SpawnSR(func_p_t p);
 void TimerSR(void);
+void SysSleep(void);
 
 #endif
