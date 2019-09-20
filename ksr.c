@@ -85,6 +85,16 @@ void SysSleep(void) {
 }
 
 void SysWrite(void) {
+  char* str;
+  str = pcb[run_pid].tf_p->ebx;
+  while(str != '\0'){
+    cons_printf("%c", str);
+    str++;
+    sys_cursor++;
+    if(sys_cursor == VIDEO_END){
+      sys_cursor = VIDEO_START;
+    }
+  }
    /*char *str =  ... passed over by a register value wtihin the trapframe
    show the str one char at a time (use a loop)
       onto the console (at the system cursor position)
