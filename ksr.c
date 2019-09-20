@@ -83,3 +83,26 @@ void SysSleep(void) {
    alter the state of the running process to SLEEP
    alter the value of run_pid to NONE*/
 }
+
+void SysWrite(void) {
+   /*char *str =  ... passed over by a register value wtihin the trapframe
+   show the str one char at a time (use a loop)
+      onto the console (at the system cursor position)
+      (while doing so, the cursor advances and may wrap to top-left corner if needed)*/
+}
+
+void SyscallSR(void) {
+   switch ( pcb[run_pid].tf_p->eax)
+   {
+      case SYS_GET_PID:    pcb[run_pid].tf_p->ebx = run_pid;
+                           break;
+      case SYS_GET_TIME:   pcb[run_pid].tf_p->ebx = sys_time_count;
+                           break;
+      case SYS_SLEEP:      SysSleep();
+                           break;
+      case SYS_WRITE:      SysWrite();
+                           break;
+      default:             cons_printf("Kernel Panic: no such syscall!\n");
+                           breakpoint();
+   }
+}
