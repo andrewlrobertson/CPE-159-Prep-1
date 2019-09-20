@@ -82,9 +82,18 @@ void Kernel(tf_t *tf_p) {       // kernel runs
    //copy tf_p to the trapframe ptr (in PCB) of the process in run
    pcb[run_pid].tf_p = tf_p;
 
-   //call the timer service routine
-   TimerSR();
-
+	 switch(tf_p->event) {
+   case TIMER_EVENT:
+      TimerSR();         // handle tiemr event
+      break;
+   case SYSCALL_EVENT:
+      SyscallSR();       // all syscalls go here 1st
+      break;
+   default:
+      cons_printf("Kernel Panic: no such event!\n");
+      breakpoint();
+   }
+	 
    //if 'b' key on target PC is pressed, goto the GDB prompt
    if(cons_kbhit() == 1){
       ch = cons_getchar();
