@@ -35,23 +35,24 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
    if(pid != IDLE) EnQue(pid, &ready_que);
 
    //use a tool function to copy from 'p' to DRAM_START, for STACK_MAX bytes
-   MemCpy((char*)DRAM_START, (char*)p, STACK_MAX);
+   MemCpy((char*)DRAM_START + pid * STACK_MAX, (char*)p, STACK_MAX);
 
    //create trapframe for process 'pid:'
 
-   //1st position trapframe pointer in its PCB to the end of the stack
-   pcb[pid].tf_p = (tf_t*)(DRAM_START + STACK_MAX - sizeof(tf_t));
+   //1st position trapframe pointer in i+ts PCB to the end of the stack
+   pcb[pid].tf_p = (tf_t*)((DRAM_START + pid * STACK_MAX) + STACK_MAX - sizeof(tf_t));
 
    //set efl in trapframe to EF_DEFAULT_VALUE|EF_INTR  // handle intr
    pcb[pid].tf_p->efl = EF_DEFAULT_VALUE | EF_INTR;
    //set cs in trapframe to return of calling get_cs() // duplicate from CPU
    pcb[pid].tf_p->cs = get_cs();
    //set eip in trapframe to DRAM_START                // where code copied
-   pcb[pid].tf_p->eip = DRAM_START;
+   pcb[pid].tf_p->eip = DRAM_START + pid * STACK_MAX;
 }
 
 // count run time and switch if hitting time limit
 void TimerSR(void) {
+	int x;
    //1st notify PIC control register that timer event is now served
    outportb(PIC_CONT_REG, TIMER_SERVED_VAL);
    //increment system time count by 1
@@ -61,6 +62,19 @@ void TimerSR(void) {
    //increment the life span count of the process currently running by 1
    pcb[run_pid].total_time++;
 
+   
+   //Use a loop to look for any processes that need to be waken up!
+   for(x = 0; x < PROC_MAX; x++){
+		if (pcb[x].wake_time == sys_time_count){
+			pcb[x].state = READY;
+		}
+   }
+   //also add here that:
+   //if run_pid is IDLE, just simply return;    // Idle exempt from below, phase2
+   if(pid != IDLE) return;
+   
+   
+   
    //if the time count of the process is reaching maximum allowed runtime
    if(pcb[run_pid].time_count == TIME_MAX){
       //move the process back to the ready queue
