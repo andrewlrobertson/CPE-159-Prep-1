@@ -68,3 +68,20 @@ void MemCpy(char *dst, char *src, unsigned int max){
 	   dst[x] = src[x];
 	}
 }
+
+
+
+
+void Number2Str(int x, char *str) {
+	int i = 0;
+  
+	while(x != 0){
+		str[i] = x % 10 + 48;
+		x = x / 10;
+		i++;
+		if(x == 0){
+		str[i] = '\0';
+		}
+	}
+
+}
