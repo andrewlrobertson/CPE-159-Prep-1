@@ -31,6 +31,9 @@ void BootStrap(void) {         // set up kernel!
    //set sys time count to zero
 	int x;
 	sys_time_count = 0;
+	
+	//sys_cursor = ???  // have it set to VIDEO_START in BootStrap()
+	sys_cursor = VIDEO_START;
 
    //call tool Bzero() to clear avail queue
    Bzero((char *)&avail_que, sizeof(que_t));
@@ -43,8 +46,10 @@ void BootStrap(void) {         // set up kernel!
 
    //get IDT location
    idt = get_idt_base();
-   //addr of TimerEntry is placed into proper IDT entry
+   //addr of TimerEntry and SyscallEntry is placed into proper IDT entry
    fill_gate(&idt[TIMER_EVENT], (int)TimerEntry, get_cs(), ACC_INTR_GATE, 0);
+   //use fill_gate() to set entry # SYSCALL_EVENT to SyscallEntry
+   fill_gate(&idt[SYSCALL_EVENT], (int)SyscallEntry, get_cs(), ACC_INTR_GATE, 0);
    //send PIC control register the mask value for timer handling
    outportb(PIC_MASK_REG, PIC_MASK_VAL);
 }
@@ -58,6 +63,9 @@ int main(void) {               // OS starts
    run_pid = IDLE;
    //call Loader() to load the trapframe of Idle
    Loader(pcb[run_pid].tf_p);
+   
+   //   ... after creating Idle ...also create Init
+   SpawnSR(Init);
 
    return 0; // never would actually reach here
 }
@@ -82,14 +90,14 @@ void Kernel(tf_t *tf_p) {       // kernel runs
    //copy tf_p to the trapframe ptr (in PCB) of the process in run
    pcb[run_pid].tf_p = tf_p;
 
-	 switch(tf_p->event) {
-   case TIMER_EVENT:
+	switch(tf_p->event) {
+	case TIMER_EVENT:
       TimerSR();         // handle tiemr event
       break;
-   case SYSCALL_EVENT:
+	case SYSCALL_EVENT:
       SyscallSR();       // all syscalls go here 1st
       break;
-   default:
+	default:
       cons_printf("Kernel Panic: no such event!\n");
       breakpoint();
    }
