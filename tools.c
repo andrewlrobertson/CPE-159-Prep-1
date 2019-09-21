@@ -83,5 +83,7 @@ void Number2Str(int x, char *str) {
 		str[i] = '\0';
 		}
 	}
+	
+	//NEED TO REVERSE ORDER
 
 }
