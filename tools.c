@@ -45,7 +45,7 @@ void EnQue(int num, que_t *q){
       breakpoint();
    }
    q->que[q->tail] = num;
-   q->tail++;   
+   q->tail++;
 }
 
 /*code a Bzero() function to clear a memory region (by filling with NUL
@@ -74,7 +74,9 @@ void MemCpy(char *dst, char *src, unsigned int max){
 
 void Number2Str(int x, char *str) {
 	int i = 0;
-  
+  int stop, offset, end;
+  char swap;
+
 	while(x != 0){
 		str[i] = x % 10 + 48;
 		x = x / 10;
@@ -83,7 +85,21 @@ void Number2Str(int x, char *str) {
 		str[i] = '\0';
 		}
 	}
-	
-	//NEED TO REVERSE ORDER
 
+	//NEED TO REVERSE ORDER
+  if (i>1){
+     end = i-1;
+     if(i%2==0){
+       stop = (i/2)-1;
+     }
+     else{
+       stop = (i/2);
+     }
+
+     for(offset = 0; offset<=stop, offset++){
+       swap = str[offset];
+       str[offset] = str[end-offset];
+       str[end-offset] = swap;
+     }
+  }
 }
