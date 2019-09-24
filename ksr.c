@@ -89,7 +89,7 @@ void TimerSR(void) {
 void SysSleep(void) {
    int sleep_sec;
    sleep_sec = pcb[run_pid].tf_p->ebx;
-   pcb[run_pid].wake_time = sys_time_count + 100(sleep_sec);
+   pcb[run_pid].wake_time = sys_time_count + 100*(sleep_sec);
    pcb[run_pid].state = SLEEP;
    run_pid = NONE;
    /*calculate the wake time of the running process using the current system
