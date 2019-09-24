@@ -1,6 +1,6 @@
 // kernel.c, 159, phase 1
 //
-// Team Name: Please_give_us_an_A
+// Team Name: smooth_operators
 // Members:   Halterman, Ehsan
 //            Johnson, Kaicha
 //            Robertson, Andrew
