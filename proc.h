@@ -4,5 +4,6 @@
 #define _PROC_
 
 void Idle(void);
+void Init(void);
 
 #endif
