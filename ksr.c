@@ -67,6 +67,7 @@ void TimerSR(void) {
    for(x = 0; x < PROC_MAX; x++){
 		if (pcb[x].wake_time == sys_time_count){
 			pcb[x].state = READY;
+			EnQue(x, &ready_que);
 		}
    }
    //also add here that:
