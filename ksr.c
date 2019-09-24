@@ -100,7 +100,7 @@ void SysSleep(void) {
 
 void SysWrite(void) {
   char* str;
-  str = pcb[run_pid].tf_p->ebx;
+  str = (char*)pcb[run_pid].tf_p->ebx;
   while(str != '\0'){
     cons_printf("%c", str);
     str++;
