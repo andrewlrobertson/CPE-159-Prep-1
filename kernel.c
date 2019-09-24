@@ -61,11 +61,12 @@ int main(void) {               // OS starts
    SpawnSR(Idle);              // create Idle thread
    //set run_pid to IDLE
    run_pid = IDLE;
+   //   ... after creating Idle ...also create Init
+   SpawnSR(Init);
    //call Loader() to load the trapframe of Idle
    Loader(pcb[run_pid].tf_p);
    
-   //   ... after creating Idle ...also create Init
-   SpawnSR(Init);
+
 
    return 0; // never would actually reach here
 }
