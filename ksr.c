@@ -111,22 +111,6 @@ void SysWrite(void) {
        sys_cursor = VIDEO_START;
     }
   }
-/*
-  *sys_cursor = 't' + VGA_MASK_VAL;
-  sys_cursor++;
-  if(sys_cursor == (VIDEO_END)){
-       sys_cursor = VIDEO_START;
-    }
- */
-
-  /*while(str != '\0'){
-    cons_printf("%c", str);
-    str++;
-    sys_cursor++;
-    if(sys_cursor == VIDEO_END){
-      sys_cursor = VIDEO_START;
-    }
-  }*/
    /*char *str =  ... passed over by a register value wtihin the trapframe
    show the str one char at a time (use a loop)
       onto the console (at the system cursor position)
