@@ -35,6 +35,7 @@ typedef enum {AVAIL, READY, RUN, SLEEP} state_t;   //Add a new state SLEEP to th
       eax, ecx, edx, ebx, esp, ebp, esi, edi, eip, cs, efl*/
 //Use the new trapframe sequence (entry.S requires alteration):	  
 typedef struct{
+   unsigned int
       edi, esi, ebp, esp, ebx, edx, ecx, eax, event, eip, cs, efl;		// add an 'event' into this, phase2
 } tf_t;
 
