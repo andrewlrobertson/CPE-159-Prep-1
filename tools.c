@@ -96,7 +96,7 @@ void Number2Str(int x, char *str) {
        stop = (i/2);
      }
 
-     for(offset = 0; offset<=stop, offset++){
+     for(offset = 0; offset<=stop; offset++){
        swap = str[offset];
        str[offset] = str[end-offset];
        str[end-offset] = swap;
