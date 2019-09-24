@@ -73,7 +73,7 @@ void MemCpy(char *dst, char *src, unsigned int max){
 
 
 void Number2Str(int x, char *str) {
-/*(	int i = 0;
+	int i = 0;
   int stop, offset, end;
   char swap;
 
@@ -101,6 +101,5 @@ void Number2Str(int x, char *str) {
        str[offset] = str[end-offset];
        str[end-offset] = swap;
      }
-  }*/
-  str = "test";
+  }
 }
