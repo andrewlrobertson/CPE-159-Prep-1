@@ -41,13 +41,13 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
    //declare two integers: my_pid & os_time
    int my_pid, os_time;
    //declare two 20-char arrays: pid_str & time_str
-   char pid_str[20];
-   char time_str[20];
+  char pid_str[20];
+  char time_str[20];
 
    //call sys_get_pid() to get my_pid
-   my_pid = sys_get_pid();
+  my_pid = sys_get_pid();
    //call Number2Str() to convert it to pid_str
-   Number2Str(my_pid, pid_str);
+  Number2Str(my_pid, pid_str);
 
    while(1) {
       // call sys_write() to show "my PID is "
