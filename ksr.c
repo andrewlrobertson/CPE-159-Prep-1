@@ -71,7 +71,7 @@ void TimerSR(void) {
    }
    //also add here that:
    //if run_pid is IDLE, just simply return;    // Idle exempt from below, phase2
-   if(run_pid != IDLE) return;
+   if(run_pid == IDLE) return;
    
    
    
