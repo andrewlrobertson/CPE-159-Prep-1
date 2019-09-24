@@ -3,7 +3,6 @@
 
 #include "const-type.h"  // VGA_MASK_VAL
 #include "ext-data.h"    // sys_time_count
-#include "syscall.h"     // sys service calls
 #include "tools.h"       // Number2Str()
 
 
