@@ -37,8 +37,7 @@ int DeQue(que_t *q){
 /*code an EnQue() function given a number and a queue (by a pointer), it
 appends the number to the tail of the queue, or shows an error message
 and go into the GDB:
-      cons_printf("Panic: queue is full, cannot EnQue!\n");
-      breakpoint();*/
+
 void EnQue(int num, que_t *q){
    if (QueFull(q)){
       cons_printf("Panic: queue is full, cannot EnQue!\n");
@@ -86,7 +85,6 @@ void Number2Str(int x, char *str) {
 		}
 	}
 
-	//NEED TO REVERSE ORDER
   if (i>1){
      end = i-1;
      if(i%2==0){

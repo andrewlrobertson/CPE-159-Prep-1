@@ -8,18 +8,8 @@
 
 
 /*Code an Idle() function that doesn't have any input or return, but just
-flickers the dot symbol at the upper-left corner of the target PC display.
+flickers the dot symbol at the upper-left corner of the target PC display.*/
 
-It reads sys_time_count and at each second interval writes '.' or ' ' via
-an unsigned short pointer to the VGA video memory location 0xb8000.
-Apply the VGA_MASK_VAL when showing . or space so it will appear to be
-boldface writing.
-    ... declare a pointer and set it to the upper-left display corner ...
-    ... declare and set a flag ...
-    in an infinite loop:
-       whenever the system time reaches a multiple of 100 (per 1 second):
-          a. judging from the flag and show either the dot or space
-          b. alternate the flag*/
 
 void Idle(void){
    unsigned short *upper_left_pos = (unsigned short *)0xb8000;
