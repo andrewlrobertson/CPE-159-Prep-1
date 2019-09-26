@@ -28,37 +28,47 @@ void Idle(void){
 }
 
 void Init(void) {  // Init, PID 1, asks/tests various OS services
-   //declare two integers: my_pid & os_time
-   int my_pid, os_time;
-   //declare two 20-char arrays: pid_str & time_str
+  //declare two integers: my_pid & os_time
+  int my_pid, os_time;
+  //declare two 20-char arrays: pid_str & time_str
   char pid_str[20];
   char time_str[20];
+  
+  int forked_pid;
+  
+  forked_pid = sys_fork();
+  if(forked_pid == NONE){
+	  sys_write("sys_fork() failed!\n");
+  }
+  
+  forked_pid = sys_fork();
+  if(forked_pid == NONE){
+	  sys_write("sys_fork() failed!\n");
+  }
 
-   //call sys_get_pid() to get my_pid
-  my_pid = sys_get_pid();
-   //call Number2Str() to convert it to pid_str
-  Number2Str(my_pid, pid_str);
+  my_pid = sys_get_pid();                  
+  Number2Str(my_pid, pid_str);				
 
    while(1) {
-      // call sys_write() to show "my PID is "
-	  sys_write("my PID is ");
-      // call sys_write() to show my pid_str
-	  sys_write(pid_str);
-      // call sys_write to show "... "
-	  sys_write("... ");
-      // call sys_sleep() to sleep for 1 second
-	  sys_sleep(1);
-      // call sys_get_time() to get current os_time
-	  os_time = sys_get_time();
-      // call Number2Str() to convert it to time_str
-	  Number2Str(os_time, time_str);
-      // call sys_write() to show "sys time is "
-	  sys_write("sys time is ");
-      // call sys_write() to show time_str
-	  sys_write(time_str);
-      // call sys_write to show "... "
-	  sys_write("... ");
-      // call sys_sleep() to sleep for 1 second
-	  sys_sleep(1);
+		// sleep for a second,
+		sys_sleep(1);
+		// set cursor position to my row (equal to my PID), column 0,
+		sys_set_cursor(my_pid, 0);
+		// call sys_write a few times to show my PID as before,
+		sys_write("my PID is ");
+		sys_write(pid_str);
+		sys_write("... ");
+		// get time, and convert it,
+		os_time = sys_get_time();
+		Number2Str(os_time, time_str)
+		// sleep for a second,
+		sys_sleep(1);
+		// set cursor position back again,
+		sys_set_cursor(0, 0);
+		// call sys_write a few times to show sys time as before.
+		sys_write("sys time is ");
+		sys_write(time_str);
+		sys_write("... ");	   
+
    }
 }
