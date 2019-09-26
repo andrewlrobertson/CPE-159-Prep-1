@@ -11,5 +11,6 @@ void SysSleep(void);
 void SysWrite(void);
 void SyscallSR(void);
 void SysSetCursor(void);
+void SysFork(void);
 
 #endif
