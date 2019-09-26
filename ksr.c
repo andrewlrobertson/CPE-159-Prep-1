@@ -138,3 +138,46 @@ void SyscallSR(void) {
 void SysSetCursor(void){
    sys_cursor = (unsigned short *)(0xb8000 + 2 * ((pcb[run_pid].tf_p->ebx * 80) + pcb[run_pid].tf_p->ecx));
 }
+
+
+void SysFork(void){
+	int pid
+	int distance;
+	// 1. allocate a new PID and add it to ready_que (similar to start of SpawnSR)
+	pid = DeQue(&avail_que);
+	EnQue(pid, &ready_que);
+	// 2. copy PCB from parent process, but alter these:
+	// process state, the two time counts, and ppid
+	pcb[pid] = pcb[run_pid];
+	pcb[pid].state = READY;
+	pcb[pid].time_count = 0;
+	pcb[pid].total_time = 0;
+	pcb[pid].ppid = run_pid;
+	// 3. copy the process image (the 4KB DRAM) from parent to child:
+	// figure out destination and source byte addresses
+	// use tool MemCpy() to do the copying
+	MemCpy((char*)DRAM_START + pid * STACK_MAX, (char*)DRAM_START + run_pid * STACK_MAX, STACK_MAX);
+	   
+	// 4. calculate the byte distance between the two processes
+	// = (child PID - parent PID) * 4K
+	distance = (pid - run_pid) * STACK_MAX;
+	// 5. apply the distance to the trapframe location in child's PCB
+	pcb[pid].tf_p = pcb[run_pid].tf_p + (tf_t*)(distance);
+	// 6. use child's trapframe pointer to adjust these in the trapframe:
+	// eip (so it points o child's own instructions),
+	// ebp (so it points to child's local data),
+	// also, the value where ebp points to:
+	// treat ebp as an integer pointer and alter what it points to
+	pcb[pid].tf_p->eip = DRAM_START + pid * STACK_MAX;
+	/*------------NOT SURE ABOUT THESE 2 LINES -----------------*/
+	pcb[pid].tf_p->ebp = ; 
+	*pcb[pid].tf_p->ebp += distance; 
+	
+	   
+	// 7. correctly set return values of sys_fork():
+	// ebx in the parent's trapframe gets the new child PID
+	// ebx in the child's trapframe gets ?
+	pcb[run_pid].tf_p->ebx = pid;
+	pcb[pid].tf_p->ebx = 0;
+
+}
