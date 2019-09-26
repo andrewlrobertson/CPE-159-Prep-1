@@ -36,7 +36,7 @@ int DeQue(que_t *q){
 
 /*code an EnQue() function given a number and a queue (by a pointer), it
 appends the number to the tail of the queue, or shows an error message
-and go into the GDB:
+and go into the GDB:*/
 
 void EnQue(int num, que_t *q){
    if (QueFull(q)){
