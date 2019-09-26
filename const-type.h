@@ -24,6 +24,8 @@
 #define SYS_GET_TIME 130
 #define SYS_SLEEP 131
 #define SYS_WRITE 132
+#define SYS_FORK 133
+#define SYS_SET_CURSOR 134
 #define VIDEO_START (unsigned short *)0xb8000
 #define VIDEO_END ((unsigned short *)0xb8000 + 25 * 80)
 
@@ -33,23 +35,24 @@ typedef enum {AVAIL, READY, RUN, SLEEP} state_t;   //Add a new state SLEEP to th
 
 /*define a trapframe type (tf_t) that has these 'unsigned int'
       eax, ecx, edx, ebx, esp, ebp, esi, edi, eip, cs, efl*/
-//Use the new trapframe sequence (entry.S requires alteration):	  
+//Use the new trapframe sequence (entry.S requires alteration):
 typedef struct{
    unsigned int
       edi, esi, ebp, esp, ebx, edx, ecx, eax, event, eip, cs, efl;		// add an 'event' into this, phase2
 } tf_t;
 
-/*define a PCB type (pcb_t) that has 
+/*define a PCB type (pcb_t) that has
    state_t state
    tf_t *tf_p
    unsigned int time_count and total_time*/
-   
+
 typedef struct{
    state_t state;
    tf_t *tf_p;
    unsigned int time_count;
    unsigned int total_time;
    unsigned int wake_time;              //Add an unsigned int wake_time to the PCB type
+   unsigned int ppid;
 } pcb_t;
 
 /*define a queue type (que_t) that has an integer 'tail' and an integer
