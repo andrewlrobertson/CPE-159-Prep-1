@@ -128,11 +128,13 @@ void SyscallSR(void) {
                            break;
       case SYS_WRITE:      SysWrite();
                            break;
+      case SYS_SET_CURSOR: SysSetCursor();
+                           break;
       default:             cons_printf("Kernel Panic: no such syscall!\n");
                            breakpoint();
    }
 }
 
 void SysSetCursor(void){
-   sys_cursor = (unsigned short *)(0xb8000 + pcb[run_pid].tf_p->ebx * pcb[run_pid].tf_p->ecx);
+   sys_cursor = (unsigned short *)(0xb8000 + (pcb[run_pid].tf_p->ebx * 80) + pcb[run_pid].tf_p->ecx);
 }
