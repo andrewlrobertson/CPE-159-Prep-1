@@ -106,7 +106,7 @@ void Kernel(tf_t *tf_p) {       // kernel runs
    //if 'b' key on target PC is pressed, goto the GDB prompt
    if(cons_kbhit()){
       ch = cons_getchar();
-      if(ch == 'b'){ breakpoint ();}
+      if(ch == 'b'){ breakpoint();}
    }
    //call Scheduler() to change run_pid if needed
    Scheduler();
