@@ -61,3 +61,15 @@ void sys_set_cursor(int row, int col) {  // phase3
       : "eax", "ebx", "ecx"            // clobbered registers
  );
 }
+
+int sys_fork(void) {                     // phase3
+   int pid;
+   asm("movl %1, %%eax;     // # for kernel to identify service
+        int $128;           // interrupt!
+        movl %%ebx, %0"     // after, copy ebx to return
+       : "=g" (pid)         // output from asm()
+       : "g" (SYS_FORK)  // input to asm()
+       : "eax", "ebx"       // clobbered registers
+   );
+   return pid;
+}
