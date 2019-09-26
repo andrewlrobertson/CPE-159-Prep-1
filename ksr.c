@@ -62,7 +62,7 @@ void TimerSR(void) {
    //increment the life span count of the process currently running by 1
    pcb[run_pid].total_time++;
 
-   
+
    //Use a loop to look for any processes that need to be waken up!
    for(x = 0; x < PROC_MAX; x++){
 		if (pcb[x].wake_time == sys_time_count){
@@ -73,9 +73,9 @@ void TimerSR(void) {
    //also add here that:
    //if run_pid is IDLE, just simply return;    // Idle exempt from below, phase2
    if(run_pid == IDLE) return;
-   
-   
-   
+
+
+
    //if the time count of the process is reaching maximum allowed runtime
    if(pcb[run_pid].time_count == TIME_MAX){
       //move the process back to the ready queue
@@ -131,4 +131,8 @@ void SyscallSR(void) {
       default:             cons_printf("Kernel Panic: no such syscall!\n");
                            breakpoint();
    }
+}
+
+void SysSetCursor(void){
+   sys_cursor = ((unsigned short *)0xb8000 + pcb[run_pid].tf_p->ebx * pcb[run_pid].tf_p->ecx);
 }
