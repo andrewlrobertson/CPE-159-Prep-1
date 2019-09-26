@@ -134,5 +134,5 @@ void SyscallSR(void) {
 }
 
 void SysSetCursor(void){
-   sys_cursor = ((unsigned short *)0xb8000 + pcb[run_pid].tf_p->ebx * pcb[run_pid].tf_p->ecx);
+   sys_cursor = (unsigned short *)(0xb8000 + pcb[run_pid].tf_p->ebx * pcb[run_pid].tf_p->ecx);
 }
