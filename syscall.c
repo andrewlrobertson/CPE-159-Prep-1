@@ -50,3 +50,14 @@ void sys_write(char* str) {             // similar to sys_sleep
        : "eax", "ebx"            // clobbered registers
 	);
 }
+
+void sys_set_cursor(int row, int col) {  // phase3
+  asm("movl %0, %%eax;          // # for kernel to identify service
+       movl %1, %%ebx;          // row
+       movl %2, %%ecx;          // col
+       int $128"                // interrupt!
+      :                         // no output from asm()
+      : "g" (SYS_SET_CURSOR), "g" (row), "g" (col)  // 3 inputs to asm()
+      : "eax", "ebx", "ecx"            // clobbered registers
+ );
+}
