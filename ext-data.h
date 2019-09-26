@@ -19,5 +19,6 @@ extern int sys_get_time(void);
 extern void sys_sleep(int sleep_sec);
 extern void sys_write(char* str);
 extern void sys_set_cursor(int row, int col);
-
+extern int sys_fork(void);
+  
 #endif
