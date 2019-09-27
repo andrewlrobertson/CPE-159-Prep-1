@@ -117,6 +117,10 @@ void SysWrite(void) {
       (while doing so, the cursor advances and may wrap to top-left corner if needed)*/
 }
 
+void SysSetCursor(void){
+   sys_cursor = (unsigned short *)(0xb8000 + 2 * ((pcb[run_pid].tf_p->ebx * 80) + pcb[run_pid].tf_p->ecx));
+}
+
 void SyscallSR(void) {
    switch ( pcb[run_pid].tf_p->eax)
    {
@@ -134,11 +138,6 @@ void SyscallSR(void) {
                            breakpoint();
    }
 }
-
-void SysSetCursor(void){
-   sys_cursor = (unsigned short *)(0xb8000 + 2 * ((pcb[run_pid].tf_p->ebx * 80) + pcb[run_pid].tf_p->ecx));
-}
-
 
 void SysFork(void){
 	int pid;
