@@ -141,7 +141,7 @@ void SysSetCursor(void){
 
 
 void SysFork(void){
-	int pid
+	int pid;
 	int distance;
 	// 1. allocate a new PID and add it to ready_que (similar to start of SpawnSR)
 	pid = DeQue(&avail_que);
