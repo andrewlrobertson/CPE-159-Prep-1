@@ -33,21 +33,21 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
   //declare two 20-char arrays: pid_str & time_str
   char pid_str[20];
   char time_str[20];
-  
+
   int forked_pid;
-  
-  forked_pid = sys_fork();
-  if(forked_pid == NONE){
-	  sys_write("sys_fork() failed!\n");
-  }
-  
+
   forked_pid = sys_fork();
   if(forked_pid == NONE){
 	  sys_write("sys_fork() failed!\n");
   }
 
-  my_pid = sys_get_pid();                  
-  Number2Str(my_pid, pid_str);				
+  forked_pid = sys_fork();
+  if(forked_pid == NONE){
+	  sys_write("sys_fork() failed!\n");
+  }
+
+  my_pid = sys_get_pid();
+  Number2Str(my_pid, pid_str);
 
    while(1) {
 		// sleep for a second,
@@ -60,7 +60,7 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
 		sys_write("... ");
 		// get time, and convert it,
 		os_time = sys_get_time();
-		Number2Str(os_time, time_str)
+		Number2Str(os_time, time_str);
 		// sleep for a second,
 		sys_sleep(1);
 		// set cursor position back again,
@@ -68,7 +68,7 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
 		// call sys_write a few times to show sys time as before.
 		sys_write("sys time is ");
 		sys_write(time_str);
-		sys_write("... ");	   
+		sys_write("... ");
 
    }
 }
