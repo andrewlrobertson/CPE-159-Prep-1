@@ -157,7 +157,7 @@ void SysFork(void){
 	// figure out destination and source byte addresses
 	// use tool MemCpy() to do the copying
 	MemCpy((char*)DRAM_START + pid * STACK_MAX, (char*)DRAM_START + run_pid * STACK_MAX, STACK_MAX);
-	   
+
 	// 4. calculate the byte distance between the two processes
 	// = (child PID - parent PID) * 4K
 	distance = (pid - run_pid) * STACK_MAX;
@@ -170,10 +170,10 @@ void SysFork(void){
 	// treat ebp as an integer pointer and alter what it points to
 	pcb[pid].tf_p->eip = DRAM_START + pid * STACK_MAX;
 	/*------------NOT SURE ABOUT THESE 2 LINES -----------------*/
-	pcb[pid].tf_p->ebp = ; 
-	*pcb[pid].tf_p->ebp += distance; 
-	
-	   
+	pcb[pid].tf_p->ebp = ;                       //This is to change the location pointed to
+	*pcb[pid].tf_p->ebp = ;                      //This is to change the value at that address
+
+
 	// 7. correctly set return values of sys_fork():
 	// ebx in the parent's trapframe gets the new child PID
 	// ebx in the child's trapframe gets ?
