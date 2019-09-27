@@ -121,24 +121,6 @@ void SysSetCursor(void){
    sys_cursor = (unsigned short *)(0xb8000 + 2 * ((pcb[run_pid].tf_p->ebx * 80) + pcb[run_pid].tf_p->ecx));
 }
 
-void SyscallSR(void) {
-   switch ( pcb[run_pid].tf_p->eax)
-   {
-      case SYS_GET_PID:    pcb[run_pid].tf_p->ebx = run_pid;
-                           break;
-      case SYS_GET_TIME:   pcb[run_pid].tf_p->ebx = sys_time_count;
-                           break;
-      case SYS_SLEEP:      SysSleep();
-                           break;
-      case SYS_WRITE:      SysWrite();
-                           break;
-      case SYS_SET_CURSOR: SysSetCursor();
-                           break;
-      default:             cons_printf("Kernel Panic: no such syscall!\n");
-                           breakpoint();
-   }
-}
-
 void SysFork(void){
 	int pid;
 	int distance;
@@ -180,4 +162,24 @@ void SysFork(void){
 	pcb[run_pid].tf_p->ebx = pid;
 	pcb[pid].tf_p->ebx = 0;
 
+}
+
+void SyscallSR(void) {
+   switch ( pcb[run_pid].tf_p->eax)
+   {
+      case SYS_GET_PID:    pcb[run_pid].tf_p->ebx = run_pid;
+                           break;
+      case SYS_GET_TIME:   pcb[run_pid].tf_p->ebx = sys_time_count;
+                           break;
+      case SYS_SLEEP:      SysSleep();
+                           break;
+      case SYS_WRITE:      SysWrite();
+                           break;
+      case SYS_SET_CURSOR: SysSetCursor();
+                           break;
+      case SYS_FORK:       SysFork();
+                           break;
+      default:             cons_printf("Kernel Panic: no such syscall!\n");
+                           breakpoint();
+   }
 }
