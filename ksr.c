@@ -143,8 +143,7 @@ void SysFork(void){
 	// = (child PID - parent PID) * 4K
 	distance = (pid - run_pid) * STACK_MAX;
 	// 5. apply the distance to the trapframe location in child's PCB
-	pcb[pid].tf_p = pcb[run_pid].tf_p + (tf_t*)(distance);  //There's no definition of add for our user defined type
-                                                          //Currently using this to test with pcb[pid].tf_p = &pcb[run_pid].tf_p + distance;
+	(char*)pcb[pid].tf_p = (char*)pcb[run_pid].tf_p + distance;  //There's no definition of add for our user defined type
 	// 6. use child's trapframe pointer to adjust these in the trapframe:
 	// eip (so it points o child's own instructions),
 	// ebp (so it points to child's local data),
