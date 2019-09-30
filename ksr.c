@@ -147,11 +147,15 @@ void SysFork(void){
 	// 5. apply the distance to the trapframe location in child's PCB
 	(char*)pcb[pid].tf_p = (char*)pcb[run_pid].tf_p + distance;  //There's no definition of add for our user defined type
 	// 6. use child's trapframe pointer to adjust these in the trapframe:
-	// eip (so it points o child's own instructions),
-	// ebp (so it points to child's local data),
+
+  // eip (so it points o child's own instructions),
+  pcb[pid].tf_p->eip = DRAM_START + pid * STACK_MAX;
+  // I think it should be pcb[pid].tf_p->eip = pcb[run_pid].tf_p->eip + distance;
+  // But this change gives a segmentation fault, may be because of something else though
+
+  // ebp (so it points to child's local data),
 	// also, the value where ebp points to:
 	// treat ebp as an integer pointer and alter what it points to
-	pcb[pid].tf_p->eip = DRAM_START + pid * STACK_MAX;
 	/*------------NOT SURE ABOUT THESE 2 LINES -----------------*/
 	pcb[pid].tf_p->ebp = pcb[run_pid].tf_p->esp;      //This is to change the location pointed to
 	*(int *)pcb[pid].tf_p->ebp = *(int *)pcb[run_pid].tf_p->eip; //This is to change the value at that address
