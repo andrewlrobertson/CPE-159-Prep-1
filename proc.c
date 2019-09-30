@@ -4,6 +4,7 @@
 #include "const-type.h"  // VGA_MASK_VAL
 #include "ext-data.h"    // sys_time_count
 #include "tools.h"       // Number2Str()
+#include "syscall.h"     //sys_write, sys_fork etc
 
 
 
