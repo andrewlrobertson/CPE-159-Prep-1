@@ -153,9 +153,8 @@ void SysFork(void){
 	// treat ebp as an integer pointer and alter what it points to
 	pcb[pid].tf_p->eip = DRAM_START + pid * STACK_MAX;
 	/*------------NOT SURE ABOUT THESE 2 LINES -----------------*/
-  //Should it perhaps be cast as int pointer?
-	pcb[pid].tf_p->ebp = pcb[run_pid].tf_p->ebp + distance;      //This is to change the location pointed to
-	*(int *)pcb[pid].tf_p->ebp = *(int *)pcb[run_pid].tf_p->ebp; //This is to change the value at that address
+	pcb[pid].tf_p->ebp = pcb[run_pid].tf_p->esp;      //This is to change the location pointed to
+	*(int *)pcb[pid].tf_p->ebp = *(int *)pcb[run_pid].tf_p->eip; //This is to change the value at that address
 
 
 	// 7. correctly set return values of sys_fork():
