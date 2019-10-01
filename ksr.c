@@ -65,13 +65,12 @@ void TimerSR(void) {
 
    //Use a loop to look for any processes that need to be waken up!
    for(x = 0; x < PROC_MAX; x++){
-     if (pcb[x].state == SLEEP){
-		    if (pcb[x].wake_time >= sys_time_count){
-			    pcb[x].state = READY;
-			    EnQue(x, &ready_que);
-		    }
+     if (pcb[x].state == SLEEP && pcb[x].wake_time >= sys_time_count){
+		pcb[x].state = READY;
+		EnQue(x, &ready_que);
+	}
      }
-   }
+   
    //also add here that:
    //if run_pid is IDLE, just simply return;    // Idle exempt from below, phase2
    if(run_pid == IDLE) return;
