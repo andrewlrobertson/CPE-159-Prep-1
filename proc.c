@@ -65,7 +65,7 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
 		// sleep for a second,
 		sys_sleep(1);
 		// set cursor position back again,
-		sys_set_cursor(0, 0);
+		sys_set_cursor(my_pid, 0);
 		// call sys_write a few times to show sys time as before.
 		sys_write("sys time is ");
 		sys_write(time_str);
