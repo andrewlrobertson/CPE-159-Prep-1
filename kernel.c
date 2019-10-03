@@ -25,13 +25,17 @@ unsigned short *sys_cursor;         // phase2
 //declare an unsigned integer: sys_time_count
 unsigned int sys_time_count;
 
+mutex_t video_mutex;
+unsigned sys_rand_count;
+
 struct i386_gate *idt;         // interrupt descriptor table
 
 void BootStrap(void) {         // set up kernel!
    //set sys time count to zero
 	int x;
 	sys_time_count = 0;
-	
+	sys_rand_count = 0;
+
 	//sys_cursor = ???  // have it set to VIDEO_START in BootStrap()
 	sys_cursor = VIDEO_START;
 
@@ -39,6 +43,8 @@ void BootStrap(void) {         // set up kernel!
    Bzero((char *)&avail_que, sizeof(que_t));
    //call tool Bzero() to clear ready queue
    Bzero((char *)&ready_que, sizeof(que_t));
+	 //call tool Bzero() to clear avail queue
+	 Bzero((char *)&video_mutex, sizeof(mutex_t));
    //enqueue all the available PID numbers to avail queue
    for(x = 0; x < PROC_MAX; x++){
       EnQue(x, &avail_que);
@@ -65,7 +71,7 @@ int main(void) {               // OS starts
    //   ... after creating Idle ...also create Init
    //call Loader() to load the trapframe of Idle
    Loader(pcb[run_pid].tf_p);
-   
+
 
 
    return 0; // never would actually reach here
@@ -102,7 +108,7 @@ void Kernel(tf_t *tf_p) {       // kernel runs
       cons_printf("Kernel Panic: no such event!\n");
       breakpoint();
    }
-	 
+
    //if 'b' key on target PC is pressed, goto the GDB prompt
    if(cons_kbhit()){
       ch = cons_getchar();
