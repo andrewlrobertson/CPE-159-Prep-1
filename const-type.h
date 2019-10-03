@@ -15,6 +15,9 @@
 #define STACK_MAX 4096          // process stack in bytes
 #define QUE_MAX 20              // capacity of a process queue
 
+#define VIDEO_MUTEX 0
+#define UNLOCKED 0
+#define LOCKED 1
 #define NONE -1                 // to indicate none
 #define IDLE 0                  // Idle thread PID 0
 #define DRAM_START 0xe00000     // 14 MB
@@ -26,12 +29,15 @@
 #define SYS_WRITE 132
 #define SYS_FORK 133
 #define SYS_SET_CURSOR 134
+#define SYS_GET_RAND 135
+#define SYS_LOCK_MUTEX 136
+#define SYS_UNLOCK_MUTEX 137
 #define VIDEO_START (unsigned short *)0xb8000
 #define VIDEO_END ((unsigned short *)0xb8000 + 25 * 80)
 
 typedef void (*func_p_t)(void); // void-return function pointer type
 
-typedef enum {AVAIL, READY, RUN, SLEEP} state_t;   //Add a new state SLEEP to the existing state_t
+typedef enum {AVAIL, READY, RUN, SLEEP, SUSPEND} state_t;   //Add a new state SLEEP to the existing state_t
 
 /*define a trapframe type (tf_t) that has these 'unsigned int'
       eax, ecx, edx, ebx, esp, ebp, esi, edi, eip, cs, efl*/
@@ -62,5 +68,10 @@ typedef struct{
    int tail;
    int que[QUE_MAX];
 } que_t;
+
+typedef struct{
+   int lock;
+   int suspend_que[QUE_MAX];
+} mutex_t;
 
 #endif                          // to prevent name mangling
