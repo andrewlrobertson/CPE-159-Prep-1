@@ -16,6 +16,7 @@ void Idle(void){
    unsigned short *upper_left_pos = (unsigned short *)0xb8000;
    int flag = 0;
 	while(1){
+    sys_rand_count++;
 		if(sys_time_count % 100 == 0) {
 			if(flag == 0) {
 				*upper_left_pos = '*' + VGA_MASK_VAL;
@@ -25,18 +26,14 @@ void Idle(void){
 				flag = 0;
 			}
 		}
-    sys_rand_count++;
 	}
 }
 
 void Init(void) {  // Init, PID 1, asks/tests various OS services
   //declare two integers: my_pid & os_time
-  int my_pid, os_time;
+  int col, my_pid, rand, forked_pid;
   //declare two 20-char arrays: pid_str & time_str
   char pid_str[20];
-  char time_str[20];
-
-  int forked_pid;
 
   forked_pid = sys_fork();
   if(forked_pid == NONE){
@@ -53,24 +50,20 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
 
    while(1) {
 		// sleep for a second,
-		sys_sleep(1);
-		// set cursor position to my row (equal to my PID), column 0,
-		sys_set_cursor(my_pid, 0);
-		// call sys_write a few times to show my PID as before,
-		sys_write("my PID is ");
-		sys_write(pid_str);
-		sys_write("... ");
-		// get time, and convert it,
-		os_time = sys_get_time();
-		Number2Str(os_time, time_str);
-		// sleep for a second,
-		sys_sleep(1);
-		// set cursor position back again,
-		sys_set_cursor(my_pid, 0);
-		// call sys_write a few times to show sys time as before.
-		sys_write("sys time is ");
-		sys_write(time_str);
-		sys_write("... ");
-
+    for(col = 0; col < 70; col++){
+      sys_lock_mutex(VIDEO_MUTEX);
+      sys_set_cursor(my_pid, col);
+      sys_write(my_pid);
+      sys_unlock_mutex(VIDEO_MUTEX);
+      rand = (sys_get_rand() % 4) + 1;
+      sys_sleep(rand);
+    }
+    sys_lock_mutex(VIDEO_MUTEX);
+    for(col = 0; col < 70; col++){
+      sys_set_cursor(my_pid, col);
+      sys_write(" ");
+    }
+    sys_unlock_mutex(VIDEO_MUTEX);
+    sys_sleep(30);
    }
 }
