@@ -174,14 +174,14 @@ void SysLockMutex(void) {   // phase4
    mutex_id = pcb[run_pid].tf_p->ebx;
 
    if(mutex_id == VIDEO_MUTEX) {
-      if (video_mutex.lock == UNLOCKED)
+      if (video_mutex.lock == UNLOCKED){
          video_mutex.lock = LOCKED;
       } else {
         EnQue(run_pid, &video_mutex.suspend_que);
         pcb[run_pid].state = SUSPEND;
         run_pid = NONE;
       }
-   } else {
+    } else {
       cons_printf("Panic: no such mutex ID!\n");
       breakpoint();
   }
@@ -201,7 +201,7 @@ void SysUnlockMutex(void) {
       } else {
          video_mutex.lock = UNLOCKED;
       }
-   } else {
+    } else {
       cons_printf("Panic: no such mutex ID!\n");
       breakpoint();
   }
