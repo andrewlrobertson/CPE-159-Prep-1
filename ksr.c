@@ -70,7 +70,7 @@ void TimerSR(void) {
 		EnQue(x, &ready_que);
 	}
      }
-   
+
    //also add here that:
    //if run_pid is IDLE, just simply return;    // Idle exempt from below, phase2
    if(run_pid == IDLE) return;
@@ -91,7 +91,7 @@ void TimerSR(void) {
 void SysSleep(void) {
    int sleep_sec;
    sleep_sec = pcb[run_pid].tf_p->ebx;
-   pcb[run_pid].wake_time = sys_time_count + 100*(sleep_sec);
+   pcb[run_pid].wake_time = sys_time_count + 10*(sleep_sec);
    pcb[run_pid].state = SLEEP;
    run_pid = NONE;
    /*calculate the wake time of the running process using the current system
@@ -171,19 +171,31 @@ void SysFork(void){
 void SyscallSR(void) {
    switch ( pcb[run_pid].tf_p->eax)
    {
-      case SYS_GET_PID:    pcb[run_pid].tf_p->ebx = run_pid;
-                           break;
-      case SYS_GET_TIME:   pcb[run_pid].tf_p->ebx = sys_time_count;
-                           break;
-      case SYS_SLEEP:      SysSleep();
-                           break;
-      case SYS_WRITE:      SysWrite();
-                           break;
-      case SYS_SET_CURSOR: SysSetCursor();
-                           break;
-      case SYS_FORK:       SysFork();
-                           break;
+      case SYS_GET_PID:       pcb[run_pid].tf_p->ebx = run_pid;
+                              break;
+      case SYS_GET_TIME:      pcb[run_pid].tf_p->ebx = sys_time_count;
+                              break;
+      case SYS_SLEEP:         SysSleep();
+                              break;
+      case SYS_WRITE:         SysWrite();
+                              break;
+      case SYS_SET_CURSOR:    SysSetCursor();
+                              break;
+      case SYS_FORK:          SysFork();
+                              break;
+      case SYS_GET_RAND:      pcb[run_pid].tf.p->ebx = sys_rand_count;
+                              break;
+      case SYS_LOCK_MUTEX:    SysLockMutex();
+                              break;
+      case SYS_UNLOCK_MUTEX:  SysUnlockMutex();
+                              break;
       default:             cons_printf("Kernel Panic: no such syscall!\n");
                            breakpoint();
+   }
+
+   if(run_pid != NONE){
+      pcb[run_pid].state = READY;
+      EnQue(run_pid, ready_que);
+      run_pid = NONE;
    }
 }
