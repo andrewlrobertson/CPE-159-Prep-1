@@ -8,5 +8,8 @@ void sys_sleep(int sleep_sec);
 void sys_write(char* str);
 void sys_set_cursor(int row, int col);
 int sys_fork(void);
+unsigned sys_get_rand(void);
+void sys_lock_mutex(int mutex_id);
+void sys_unlock_mutex(int mutex_id);
 
 #endif
