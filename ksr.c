@@ -222,7 +222,7 @@ void SyscallSR(void) {
                               break;
       case SYS_FORK:          SysFork();
                               break;
-      case SYS_GET_RAND:      pcb[run_pid].tf.p->ebx = sys_rand_count;
+      case SYS_GET_RAND:      pcb[run_pid].tf_p->ebx = sys_rand_count;
                               break;
       case SYS_LOCK_MUTEX:    SysLockMutex();
                               break;
@@ -234,7 +234,7 @@ void SyscallSR(void) {
 
    if(run_pid != NONE){
       pcb[run_pid].state = READY;
-      EnQue(run_pid, ready_que);
+      EnQue(run_pid, &ready_que);
       run_pid = NONE;
    }
 }
