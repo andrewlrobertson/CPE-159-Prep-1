@@ -71,7 +71,7 @@ typedef struct{
 
 typedef struct{
    int lock;
-   int suspend_que[QUE_MAX];
+   que_t suspend_que;
 } mutex_t;
 
 #endif                          // to prevent name mangling
