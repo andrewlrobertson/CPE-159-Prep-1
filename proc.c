@@ -53,7 +53,7 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
     for(col = 0; col < 70; col++){
       sys_lock_mutex(VIDEO_MUTEX);
       sys_set_cursor(my_pid, col);
-      sys_write(my_pid);
+      sys_write(pid_str);
       sys_unlock_mutex(VIDEO_MUTEX);
       rand = (sys_get_rand() % 4) + 1;
       sys_sleep(rand);
