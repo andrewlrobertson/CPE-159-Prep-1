@@ -25,6 +25,7 @@ void Idle(void){
 				flag = 0;
 			}
 		}
+    sys_rand_count++;
 	}
 }
 
