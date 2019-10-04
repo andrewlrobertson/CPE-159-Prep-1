@@ -13,5 +13,6 @@ void SyscallSR(void);
 void SysSetCursor(void);
 void SysFork(void);
 void SysUnlockMutex(void);
+void SysLockMutex(void);
 
 #endif

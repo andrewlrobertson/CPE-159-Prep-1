@@ -168,6 +168,26 @@ void SysFork(void){
 
 }
 
+void SysLockMutex(void) {   // phase4
+   int mutex_id;
+
+   mutex_id = pcb[run_pid].tf_p->ebx;
+
+   if(mutex_id == VIDEO_MUTEX) {
+      if (video_mutex.lock == UNLOCKED)
+         video_mutex.lock = LOCKED;
+      } else {
+        EnQue(run_pid, &video_mutex.suspend_que);
+        pcb[run_pid].state = SUSPEND;
+        run_pid = NONE;
+      }
+   } else {
+      cons_printf("Panic: no such mutex ID!\n");
+      breakpoint();
+  }
+}
+
+
 void SysUnlockMutex(void) {
    int mutex_id, released_pid;
 
