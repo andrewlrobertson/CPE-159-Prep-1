@@ -125,6 +125,7 @@ void SysSetCursor(void){
 void SysFork(void){
 	int pid;
 	int distance;
+  int *pnew, *pold, *ebpold, *ebpnew;
 	// 1. allocate a new PID and add it to ready_que (similar to start of SpawnSR)
 	pid = DeQue(&avail_que);
 	EnQue(pid, &ready_que);
@@ -158,8 +159,11 @@ void SysFork(void){
 	/*------------NOT SURE ABOUT THESE 2 LINES -----------------*/
 	pcb[pid].tf_p->ebp = pcb[run_pid].tf_p->ebp + distance;      //This is to change the location pointed to
 	*(int *)pcb[pid].tf_p->ebp = *(int *)pcb[run_pid].tf_p->ebp + distance; //This is to change the value at that address
-
-
+	pnew = (int*)pcb[pid].tf_p->ebp;
+  pold = (int*)pcb[run_pid].tf_p->ebp;
+  ebpnew = (int*)(*pnew);
+  ebpold = (int*)(*pold);
+  *(ebpnew+1) = *(ebpold+1) + distance; 
 	// 7. correctly set return values of sys_fork():
 	// ebx in the parent's trapframe gets the new child PID
 	// ebx in the child's trapframe gets ?
