@@ -200,8 +200,8 @@ void SysUnlockMutex(void) {
    if(mutex_id == VIDEO_MUTEX) {
       if(!QueEmpty(&video_mutex.suspend_que)) {
         released_pid = DeQue(&video_mutex.suspend_que);
-        pcb[released_pid].state = RUN;
-        run_pid = released_pid;
+        pcb[released_pid].state = READY;
+        EnQue(released_pid, &ready_que);
       } else {
          video_mutex.lock = UNLOCKED;
       }
