@@ -105,3 +105,14 @@ void sys_unlock_mutex(int mutex_id){
       : "eax", "ebx"            // clobbered registers
  );
 }
+
+void sys_exit(int exit_code) {  // phase2
+   asm("movl %0, %%eax;          // # for kernel to identify service
+        movl %1, %%ebx;          // exit code
+        int $128"                // interrupt!
+       :                         // no output from asm()
+       : "g" (SYS_EXIT), "g" (exit_code)  // 2 inputs to asm()
+       : "eax", "ebx"            // clobbered registers
+   );
+}
+
