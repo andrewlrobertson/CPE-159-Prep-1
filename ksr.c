@@ -128,6 +128,10 @@ void SysFork(void){
   int *p;
 	// 1. allocate a new PID and add it to ready_que (similar to start of SpawnSR)
 	pid = DeQue(&avail_que);
+	if (pid == NONE){
+		pcb[run_pid].tf_p->ebx == NONE;
+		return;
+	}
 	EnQue(pid, &ready_que);
 	// 2. copy PCB from parent process, but alter these:
 	// process state, the two time counts, and ppid
