@@ -106,7 +106,7 @@ void sys_unlock_mutex(int mutex_id){
  );
 }
 
-void sys_exit(int exit_code) {  // phase2
+void sys_exit(int exit_code) {  
    asm("movl %0, %%eax;          // # for kernel to identify service
         movl %1, %%ebx;          // exit code
         int $128"                // interrupt!
@@ -114,5 +114,18 @@ void sys_exit(int exit_code) {  // phase2
        : "g" (SYS_EXIT), "g" (exit_code)  // 2 inputs to asm()
        : "eax", "ebx"            // clobbered registers
    );
+}
+
+int sys_wait(int * exit_code) {           
+   int cpid;
+   asm("movl %1, %%eax;     // # for kernel to identify service
+	movl %2, %%ebx;
+        int $128;           // interrupt!
+        movl %%ecx, %0"     // after, copy ebx to return
+       : "=g" (cpid)         // output from asm()
+       : "g" (SYS_WAIT), "g" (exit_code)  //2 input to asm()
+       : "eax", "ebx" , "ecx"      // clobbered registers
+   );
+   return cpid;
 }
 
