@@ -212,6 +212,11 @@ void SysUnlockMutex(void) {
   }
 }
 
+void SysExit(void){}
+
+void SysWait(void){}
+
+
 void SyscallSR(void) {
    switch ( pcb[run_pid].tf_p->eax)
    {
@@ -233,6 +238,10 @@ void SyscallSR(void) {
                               break;
       case SYS_UNLOCK_MUTEX:  SysUnlockMutex();
                               break;
+      case SYS_EXIT:          SysExit();
+			      break;
+      case SYS_WAIT:          SysWait();
+			      break;
       default:             cons_printf("Kernel Panic: no such syscall!\n");
                            breakpoint();
    }
