@@ -214,7 +214,28 @@ void SysUnlockMutex(void) {
 
 void SysExit(void){}
 
-void SysWait(void){}
+void SysWait(void){
+   int * exit_code_ptr;
+   int cpid, x;
+   cpid = NONE;
+   exit_code_ptr = (int*)pcb[run_pid].tf.p->ebx;
+   for(x=0; x<PROC_MAX;x++){
+	   if(pcb[x].state == ZOMBIE){
+		   cpid = x;
+		   break;
+	   }
+   }
+   if(cpid == NONE){
+	   pcb[run_pid].state = WAIT;
+	   run_pid = NONE;
+   }
+   else{
+	   pcb[run_pid].tf_p->ecx = cpid;
+	   //need to pass over exit code to parent here
+	   pcb[cpid].state = READY;
+           EnQue(cpid, &ready_que);
+   }
+}
 
 
 void SyscallSR(void) {
