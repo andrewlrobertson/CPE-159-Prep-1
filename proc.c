@@ -30,40 +30,51 @@ void Idle(void){
 }
 
 void Init(void) {  // Init, PID 1, asks/tests various OS services
-  //declare two integers: my_pid & os_time
-  int col, my_pid, rand, forked_pid;
-  //declare two 20-char arrays: pid_str & time_str
-  char pid_str[20];
+  char pid_str[20], str[20];
+        int my_pid, forked_pid,
+            i, col, exit_pid, exit_code,
+            sleep_period, total_sleep_period;
 
-  forked_pid = sys_fork();
-  if(forked_pid == NONE){
-	  sys_write("sys_fork() failed!\n");
-  }
-
-  forked_pid = sys_fork();
-  if(forked_pid == NONE){
-	  sys_write("sys_fork() failed!\n");
+  for (i = 0; i < 5; i++){
+    forked_pid = sys_fork();
+    if(forked_pid != NONE) break;
+    else{
+      cons_printf("sys_fork() failed!\n");
+      sys_exit(NONE);
+    }
   }
 
   my_pid = sys_get_pid();
   Number2Str(my_pid, pid_str);
 
-   while(1) {
-		// sleep for a second,
-    for(col = 0; col < 70; col++){
+  if (my_pid == 1){
+    for (i = 0; i < 5; i++){
+      exit_pid = sys_wait(&exit_code);
+      sys_lock_mutex(VIDEO_MUTEX);
+      sys_set_cursor(my_pid, i*14);
+      sys_write("PID ");
+      Number2Str(exit_pid, str);
+      sys_write(str);
+      sys_write(": ");
+      Number2Str(exit_code, str);
+      sys_write(str);
+      sys_unlock_mutex(VIDEO_MUTEX);
+    }
+    sys_write("Init exits.");
+    sys_exit(0);
+  }
+  else{
+    col = total_sleep_period = 0;
+    while(col < 70){
       sys_lock_mutex(VIDEO_MUTEX);
       sys_set_cursor(my_pid, col);
       sys_write(pid_str);
       sys_unlock_mutex(VIDEO_MUTEX);
-      rand = ((sys_get_rand()/my_pid) % 4) + 1;
-      sys_sleep(rand);
+      sleep_period = ((sys_get_rand()/my_pid)%4) + 1;
+      sys_sleep(sleep_period);
+      total_sleep_period += sleep_period;
+      col++;
     }
-    sys_lock_mutex(VIDEO_MUTEX);
-    for(col = 0; col < 70; col++){
-      sys_set_cursor(my_pid, col);
-      sys_write(" ");
-    }
-    sys_unlock_mutex(VIDEO_MUTEX);
-    sys_sleep(30);
-   }
+    sys_exit(total_sleep_period);
+  }
 }
