@@ -129,7 +129,7 @@ void SysFork(void){
 	// 1. allocate a new PID and add it to ready_que (similar to start of SpawnSR)
 	pid = DeQue(&avail_que);
 	if (pid == NONE){
-		pcb[run_pid].tf_p->ebx == NONE;
+		pcb[run_pid].tf_p->ebx = NONE;
 		return;
 	}
 	EnQue(pid, &ready_que);
@@ -221,7 +221,7 @@ are reclaimed by the OS.*/
     exit_code = pcb[run_pid].tf_p->ebx;
 	ppid = pcb[run_pid].ppid; 
 	
-	if(pcb[ppid].state == WAIT){
+	if(pcb[ppid].state != WAIT){
 		//running process cannot exit, it becomes a zombie
 		pcb[run_pid].state = ZOMBIE;
         //no running process anymore
