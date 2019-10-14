@@ -231,7 +231,7 @@ are reclaimed by the OS.*/
             //upgrade parent's state
 			pcb[ppid].state = READY;
             //move parent to be ready to run again
-			EnQue(ppid, %ready_que);
+			EnQue(ppid, &ready_que);
          //also:
             //pass over exiting PID to parent
 			pcb[ppid].tf_p->ecx = run_pid;
@@ -240,7 +240,7 @@ are reclaimed by the OS.*/
          //also:
             //reclaim child resources (alter state, move it)
 			pcb[run_pid].state = AVAIL;
-			EnQue(run_pid, %avail_que);
+			EnQue(run_pid, &avail_que);
             //no running process anymore
 			run_pid = NONE;
 	}
