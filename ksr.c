@@ -234,7 +234,7 @@ are reclaimed by the OS.*/
 			EnQue(ppid, %ready_que);
          //also:
             //pass over exiting PID to parent
-			pcb[ppid].tf_p->ebx = run_pid;
+			pcb[ppid].tf_p->ecx = run_pid;
             //pass over exit code to parent
 			pcb[ppid].tf_p->ebx = exit_code;
          //also:
