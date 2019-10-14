@@ -212,7 +212,39 @@ void SysUnlockMutex(void) {
   }
 }
 
-void SysExit(void){}
+void SysExit(void){
+/*The exit service is to return an exit code to the parent process
+of the service-calling process, and the resources of the process
+are reclaimed by the OS.*/
+	int ppid, exit_code;
+	
+    exit_code = pcb[run_pid].tf_p->ebx;
+	ppid = pcb[run_pid].ppid; 
+	
+	if(pcb[ppid].state == WAIT){
+		//running process cannot exit, it becomes a zombie
+		pcb[run_pid].state = ZOMBIE;
+        //no running process anymore
+		run_pid = NONE;
+	} else {
+		//release parent:
+            //upgrade parent's state
+			pcb[ppid].state = READY;
+            //move parent to be ready to run again
+			EnQue(ppid, %ready_que);
+         //also:
+            //pass over exiting PID to parent
+			pcb[ppid].tf_p->ebx = run_pid;
+            //pass over exit code to parent
+			pcb[ppid].tf_p->ebx = exit_code;
+         //also:
+            //reclaim child resources (alter state, move it)
+			pcb[run_pid].state = AVAIL;
+			EnQue(run_pid, %avail_que);
+            //no running process anymore
+			run_pid = NONE;
+	}
+}
 
 void SysWait(void){
    int * exit_code_ptr;
