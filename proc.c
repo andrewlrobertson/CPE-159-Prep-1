@@ -37,8 +37,8 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
 
   for (i = 0; i < 5; i++){
     forked_pid = sys_fork();
-    if(forked_pid != NONE) break;
-    else{
+    if(forked_pid > 1) break;
+    if(forked_pid == NONE){
       sys_write("sys_fork() failed!\n");
       sys_exit(NONE);
     }
