@@ -161,7 +161,7 @@ void SysFork(void){
 	pcb[pid].tf_p->ebp = pcb[run_pid].tf_p->ebp + distance;      //This is to change the location pointed to
 	p = (int *)pcb[pid].tf_p->ebp;
   *p += distance;
-  p =(int*)*p;
+  //p =(int*)*p; 
   p++;
   *p += distance;
 
