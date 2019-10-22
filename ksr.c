@@ -252,7 +252,7 @@ void SysWait(void){
    cpid = NONE;
    exit_code_ptr = (int*)pcb[run_pid].tf_p->ebx;
    for(x=0; x<PROC_MAX;x++){
-	   if(pcb[x].state == ZOMBIE){
+	   if(pcb[x].state == ZOMBIE && x == run_pid){
 		   cpid = x;
 		   break;
 	   }
@@ -264,9 +264,9 @@ void SysWait(void){
    else{
 	   pcb[run_pid].tf_p->ecx = cpid;
 	   //need to pass over exit code to parent here
-	   pcb[run_pid].tf_p->ebx = *exit_code_ptr;
-	   pcb[cpid].state = READY;
-           EnQue(cpid, &ready_que);
+	   *exit_code_ptr = *(int*)pcb[cpid].tf_p->ebx;
+	   pcb[cpid].state = AVAIL;
+     EnQue(cpid, &avail_que);
    }
 }
 

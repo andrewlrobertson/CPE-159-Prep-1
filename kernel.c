@@ -113,6 +113,7 @@ void Kernel(tf_t *tf_p) {       // kernel runs
    if(cons_kbhit()){
       ch = cons_getchar();
       if(ch == 'b'){ breakpoint();}
+      if(ch == ' '){ SpawnSR(Init);}
    }
    //call Scheduler() to change run_pid if needed
    Scheduler();
