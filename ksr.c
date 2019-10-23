@@ -252,7 +252,7 @@ void SysWait(void){
    cpid = NONE;
    exit_code_ptr = (int*)pcb[run_pid].tf_p->ebx;
    for(x=0; x<PROC_MAX;x++){
-	   if(pcb[x].state == ZOMBIE && x == run_pid){
+	   if((pcb[x].state == ZOMBIE) && (pcb[x].ppid == run_pid)){
 		   cpid = x;
 		   break;
 	   }
