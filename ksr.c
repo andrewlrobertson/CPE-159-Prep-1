@@ -236,7 +236,7 @@ are reclaimed by the OS.*/
             //pass over exiting PID to parent
 			pcb[ppid].tf_p->ecx = run_pid;
             //pass over exit code to parent
-			pcb[ppid].tf_p->edx = exit_code;
+			*(int*)pcb[ppid].tf_p->ebx = exit_code;
          //also:
             //reclaim child resources (alter state, move it)
 			pcb[run_pid].state = AVAIL;
@@ -264,7 +264,7 @@ void SysWait(void){
    else{
 	   pcb[run_pid].tf_p->ecx = cpid;
 	   //need to modify exit code here
-	   *exit_code_ptr = pcb[run_pid].tf_p->edx;
+	   *exit_code_ptr = pcb[run_pid].tf_p->ebx;
 	   pcb[cpid].state = AVAIL;
      EnQue(cpid, &avail_que);
    }
