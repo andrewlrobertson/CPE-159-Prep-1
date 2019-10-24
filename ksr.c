@@ -270,6 +270,11 @@ void SysWait(void){
    }
 }
 
+Void SysKill(void){
+}
+
+void SysSignal(void){
+}
 
 void SyscallSR(void) {
    switch ( pcb[run_pid].tf_p->eax)
@@ -295,6 +300,10 @@ void SyscallSR(void) {
       case SYS_EXIT:          SysExit();
 			      break;
       case SYS_WAIT:          SysWait();
+			      break;
+      case SYS_SIGNAL:        SysSignal();
+			      break;
+      case SYS_KILL:          SysKill();
 			      break;
       default:             cons_printf("Kernel Panic: no such syscall!\n");
                            breakpoint();
