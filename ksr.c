@@ -278,6 +278,21 @@ void SysWait(void){
 }
 
 Void SysKill(void){
+  int pid;
+  int signal_name;
+  int x;
+
+  pid = pcb[run_pid].tf_p->ebx;
+  signal_name = pcb[run_pid].tf_p->ecx;
+
+  if((pid == 0) && (signal_name == SIGCONT)){
+      for(x=0;x<PROC_MAX;x++){
+        if((pcb[x].ppid == run_pid) && (pcb[x].state == SLEEP)){
+            pcb[x].state = READY;
+            EnQue(x, &ready_que);
+        }
+      }
+  }
 }
 
 void SysSignal(void){
