@@ -65,6 +65,7 @@ typedef struct{
    unsigned int total_time;
    unsigned int wake_time;              //Add an unsigned int wake_time to the PCB type
    unsigned int ppid;
+   func_p_t signal_handler[32];
 } pcb_t;
 
 /*define a queue type (que_t) that has an integer 'tail' and an integer
