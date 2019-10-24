@@ -161,7 +161,7 @@ void SysFork(void){
 	pcb[pid].tf_p->ebp = pcb[run_pid].tf_p->ebp + distance;      //This is to change the location pointed to
 	p = (int *)pcb[pid].tf_p->ebp;
   *p += distance;
-  //p =(int*)*p; 
+  //p =(int*)*p;
   p++;
   *p += distance;
 
@@ -212,19 +212,26 @@ void SysUnlockMutex(void) {
   }
 }
 
+void AlterStack(int pid, func_p_t p){
+
+}
+
 void SysExit(void){
 /*The exit service is to return an exit code to the parent process
 of the service-calling process, and the resources of the process
 are reclaimed by the OS.*/
 	int ppid, exit_code;
-	
+
     exit_code = pcb[run_pid].tf_p->ebx;
-	ppid = pcb[run_pid].ppid; 
-	
+	ppid = pcb[run_pid].ppid;
+
 	if(pcb[ppid].state != WAIT){
 		//running process cannot exit, it becomes a zombie
 		pcb[run_pid].state = ZOMBIE;
         //no running process anymore
+        if(pcb[ppid].signal_handler[SIGCHLD] != 0){
+            AlterStack(ppid, pcb[ppid].signal_handler[SIGCHLD]);
+        }
 		run_pid = NONE;
 	} else {
 		//release parent:

@@ -16,5 +16,8 @@ void SysUnlockMutex(void);
 void SysLockMutex(void);
 void SysExit(void);
 void SysWait(void);
+void AlterStack(int pid, func_p_t p);
+Void SysKill(void);
+void SysSignal(void);
 
 #endif
