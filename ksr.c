@@ -281,6 +281,13 @@ Void SysKill(void){
 }
 
 void SysSignal(void){
+  int signal_name;
+  funct_p_t p;
+
+  signal_name = pcb[run_pid].tf_p->ebx;
+  p = pcb[run_pid].tf_p->ecx;
+
+  pcb[run_pid].signal_handler[signal_name] = p;
 }
 
 void SyscallSR(void) {
