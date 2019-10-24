@@ -129,3 +129,25 @@ int sys_wait(int * exit_code) {
    return cpid;
 }
 
+void sys_signal(int signal_name, funct_p_t p) {  // phase6
+  asm("movl %0, %%eax;          // # for kernel to identify service
+       movl %1, %%ebx;          // signal name
+       movl %2, %%ecx;          // p
+       int $128"                // interrupt!
+      :                         // no output from asm()
+      : "g" (SYS_SIGNAL), "g" (signal_name), "g" (p)  // 3 inputs to asm()
+      : "eax", "ebx", "ecx"            // clobbered registers
+ );
+}
+
+void sys_kill(int pid, int signal_name) {  // phase6
+  asm("movl %0, %%eax;          // # for kernel to identify service
+       movl %1, %%ebx;          // pid
+       movl %2, %%ecx;          // signal name
+       int $128"                // interrupt!
+      :                         // no output from asm()
+      : "g" (SYS_KILL), "g" (pid), "g" (signal_name)  // 3 inputs to asm()
+      : "eax", "ebx", "ecx"            // clobbered registers
+ );
+}
+
