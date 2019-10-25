@@ -5,5 +5,6 @@
 
 void Idle(void);
 void Init(void);
+void MyChildExitHandler(void);
 
 #endif

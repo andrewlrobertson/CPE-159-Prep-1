@@ -23,6 +23,25 @@ void Idle(void){
 	}
 }
 
+void MyChildExitHandler(void){
+    int cpid, exit_code;   //my_pid isn't needed
+    char cpid_str[20], ec_str[20];
+
+    cpid = sys_wait(&exit_code);
+    //my_pid = sys_get_pid(); This isn't actually needed
+
+    Number2Str(cpid, cpid_str);
+    Number2Str(exit_code, ec_str);
+
+    sys_lock_mutex(VIDEO_MUTEX);
+    sys_set_cursor(cpid, 72);
+    sys_write(cpid_str);
+    sys_write(":");
+    sys_write(ec_str);
+    sys_unlock_mutex(VIDEO_MUTEX);
+
+}
+
 void Init(void) {  // Init, PID 1, asks/tests various OS services
   char pid_str[20], str[20];
         int my_pid, forked_pid,
