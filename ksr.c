@@ -13,16 +13,12 @@
 void SpawnSR(func_p_t p) {     // arg: where process code starts
    int pid;
 
-   /*use a tool function to check if available queue is empty:
-      a. cons_printf("Panic: out of PID!\n");
-      b. and go into GDB*/
-
    if( QueEmpty(&avail_que) == 1){
       cons_printf("Panic: out of PID!\n");
 	  breakpoint();
    }
 
-   //get 'pid' initialized by dequeuing the available queue
+   //get 'pid'
    pid = DeQue(&avail_que);
 
    //use a tool function to clear the content of PCB of process 'pid'
@@ -94,10 +90,6 @@ void SysSleep(void) {
    pcb[run_pid].wake_time = sys_time_count + 10*(sleep_sec);
    pcb[run_pid].state = SLEEP;
    run_pid = NONE;
-   /*calculate the wake time of the running process using the current system
-   time count plus the sleep_sec times 100
-   alter the state of the running process to SLEEP
-   alter the value of run_pid to NONE*/
 }
 
 void SysWrite(void) {
@@ -112,10 +104,6 @@ void SysWrite(void) {
        sys_cursor = VIDEO_START;
     }
   }
-   /*char *str =  ... passed over by a register value wtihin the trapframe
-   show the str one char at a time (use a loop)
-      onto the console (at the system cursor position)
-      (while doing so, the cursor advances and may wrap to top-left corner if needed)*/
 }
 
 void SysSetCursor(void){
@@ -126,48 +114,31 @@ void SysFork(void){
 	int pid;
 	int distance;
   int *p;
-	// 1. allocate a new PID and add it to ready_que (similar to start of SpawnSR)
+
 	pid = DeQue(&avail_que);
 	if (pid == NONE){
 		pcb[run_pid].tf_p->ebx = NONE;
 		return;
 	}
 	EnQue(pid, &ready_que);
-	// 2. copy PCB from parent process, but alter these:
-	// process state, the two time counts, and ppid
 	pcb[pid] = pcb[run_pid];
 	pcb[pid].state = READY;
 	pcb[pid].time_count = 0;
 	pcb[pid].total_time = 0;
 	pcb[pid].ppid = run_pid;
-	// 3. copy the process image (the 4KB DRAM) from parent to child:
-	// figure out destination and source byte addresses
-	// use tool MemCpy() to do the copying
+
 	MemCpy((char*)DRAM_START + pid * STACK_MAX, (char*)DRAM_START + run_pid * STACK_MAX, STACK_MAX);
 
 	// 4. calculate the byte distance between the two processes
-	// = (child PID - parent PID) * 4K
 	distance = (pid - run_pid) * STACK_MAX;
 	// 5. apply the distance to the trapframe location in child's PCB
-	(char*)pcb[pid].tf_p = (char*)pcb[run_pid].tf_p + distance;  //There's no definition of add for our user defined type
-	// 6. use child's trapframe pointer to adjust these in the trapframe:
-
-  // eip (so it points o child's own instructions),
+	(char*)pcb[pid].tf_p = (char*)pcb[run_pid].tf_p + distance;
   pcb[pid].tf_p->eip = pcb[run_pid].tf_p->eip + distance;
-
-  // ebp (so it points to child's local data),
-	// also, the value where ebp points to:
-	// treat ebp as an integer pointer and alter what it points to
 	pcb[pid].tf_p->ebp = pcb[run_pid].tf_p->ebp + distance;      //This is to change the location pointed to
 	p = (int *)pcb[pid].tf_p->ebp;
   *p += distance;
-  //p =(int*)*p;
   p++;
   *p += distance;
-
-	// 7. correctly set return values of sys_fork():
-	// ebx in the parent's trapframe gets the new child PID
-	// ebx in the child's trapframe gets ?
 	pcb[run_pid].tf_p->ebx = pid;
 	pcb[pid].tf_p->ebx = 0;
 
