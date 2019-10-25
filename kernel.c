@@ -13,39 +13,27 @@
 #include "proc.h"     // all user process code here
 
 // declare kernel data
-//declare an integer: run_pid;  // current running PID; if -1, none selected
+// current running PID; if -1, none selected
 int run_pid;
-//declare 2 queues: avail_que and ready_que;  // avail PID and those created/ready to run
 que_t avail_que, ready_que;
-//declare an array of PCB type: pcb[PROC_MAX];  // Process Control Blocks
 pcb_t pcb[PROC_MAX];
-//Add the new cursor position that OS keeps
-unsigned short *sys_cursor;         // phase2
-
-//declare an unsigned integer: sys_time_count
+unsigned short *sys_cursor;
 unsigned int sys_time_count;
-
 mutex_t video_mutex;
 unsigned sys_rand_count;
 
 struct i386_gate *idt;         // interrupt descriptor table
 
 void BootStrap(void) {         // set up kernel!
-   //set sys time count to zero
+
 	int x;
 	sys_time_count = 0;
 	sys_rand_count = 0;
-
-	//sys_cursor = ???  // have it set to VIDEO_START in BootStrap()
 	sys_cursor = VIDEO_START;
 
-   //call tool Bzero() to clear avail queue
    Bzero((char *)&avail_que, sizeof(que_t));
-   //call tool Bzero() to clear ready queue
    Bzero((char *)&ready_que, sizeof(que_t));
-	 //call tool Bzero() to clear avail queue
 	 Bzero((char *)&video_mutex, sizeof(mutex_t));
-   //enqueue all the available PID numbers to avail queue
    for(x = 0; x < PROC_MAX; x++){
       EnQue(x, &avail_que);
    }
@@ -64,11 +52,9 @@ int main(void) {               // OS starts
    //do the boot strap things 1st
    BootStrap();
 
-   SpawnSR(Idle);              // create Idle thread
+   SpawnSR(Idle);
    SpawnSR(Init);
-   //set run_pid to IDLE
    run_pid = IDLE;
-   //   ... after creating Idle ...also create Init
    //call Loader() to load the trapframe of Idle
    Loader(pcb[run_pid].tf_p);
 

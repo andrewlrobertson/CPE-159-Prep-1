@@ -43,33 +43,22 @@
 
 typedef void (*func_p_t)(void); // void-return function pointer type
 
-typedef enum {AVAIL, READY, RUN, SLEEP, SUSPEND, WAIT, ZOMBIE} state_t;   //Add a new state SLEEP to the existing state_t
+typedef enum {AVAIL, READY, RUN, SLEEP, SUSPEND, WAIT, ZOMBIE} state_t;
 
-/*define a trapframe type (tf_t) that has these 'unsigned int'
-      eax, ecx, edx, ebx, esp, ebp, esi, edi, eip, cs, efl*/
-//Use the new trapframe sequence (entry.S requires alteration):
 typedef struct{
    unsigned int
-      edi, esi, ebp, esp, ebx, edx, ecx, eax, event, eip, cs, efl;		// add an 'event' into this, phase2
+      edi, esi, ebp, esp, ebx, edx, ecx, eax, event, eip, cs, efl;
 } tf_t;
-
-/*define a PCB type (pcb_t) that has
-   state_t state
-   tf_t *tf_p
-   unsigned int time_count and total_time*/
 
 typedef struct{
    state_t state;
    tf_t *tf_p;
    unsigned int time_count;
    unsigned int total_time;
-   unsigned int wake_time;              //Add an unsigned int wake_time to the PCB type
+   unsigned int wake_time;
    unsigned int ppid;
    func_p_t signal_handler[32];
 } pcb_t;
-
-/*define a queue type (que_t) that has an integer 'tail' and an integer
-array 'que' in it, the dimension of 'que' is QUE_MAX*/
 
 typedef struct{
    int tail;
