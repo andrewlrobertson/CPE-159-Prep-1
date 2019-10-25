@@ -6,12 +6,6 @@
 #include "tools.h"       // Number2Str()
 #include "syscall.h"     //sys_write, sys_fork etc
 
-
-
-/*Code an Idle() function that doesn't have any input or return, but just
-flickers the dot symbol at the upper-left corner of the target PC display.*/
-
-
 void Idle(void){
    unsigned short *upper_left_pos = (unsigned short *)0xb8000;
    int flag = 0;
