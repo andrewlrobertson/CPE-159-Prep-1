@@ -48,6 +48,8 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
             i, col, exit_pid, exit_code,
             sleep_period, total_sleep_period;
 
+//sys_signal(SIGCHLD, MyChildExitHandler);
+
   for (i = 0; i < 5; i++){
     forked_pid = sys_fork();
     if(forked_pid == 0) break;
@@ -61,32 +63,42 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
   Number2Str(my_pid, pid_str);
 
   if (my_pid == 1){
-    for (i = 0; i < 5; i++){
-      exit_pid = sys_wait(&exit_code);
-      sys_lock_mutex(VIDEO_MUTEX);
-      sys_set_cursor(my_pid, i*14);
-      sys_write("PID ");
-      Number2Str(exit_pid, str);
-      sys_write(str);
-      sys_write(": ");
-      Number2Str(exit_code, str);
-      sys_write(str);
-      sys_unlock_mutex(VIDEO_MUTEX);
+    sys_lock_mutex(VIDEO_MUTEX);
+    sys_set_cursor(my_pid, 0);
+    sys_write(pid_str);
+    sys_unlock_mutex(VIDEO_MUTEX);
+
+    sys_sleep(10);
+
+    sys_lock_mutex(VIDEO_MUTEX);
+    sys_set_cursor(my_pid, 0);
+    sys_write("-");                  //may need to modify
+    sys_unlock_mutex(VIDEO_MUTEX);
+
+    sys_sleep(10);
     }
-    sys_write("Init exits.");
-    sys_exit(0);
+
   }
   else{
-    col = total_sleep_period = 0;
-    while(col < 70){
-      sys_lock_mutex(VIDEO_MUTEX);
-      sys_set_cursor(my_pid, col);
-      sys_write(pid_str);
-      sys_unlock_mutex(VIDEO_MUTEX);
-      sleep_period = ((sys_get_rand()/my_pid)%4) + 1;
-      sys_sleep(sleep_period);
-      total_sleep_period += sleep_period;
-      col++;
+    sys_sleep(1000000);
+
+       col = total_sleep_period = 0;
+       while (col<70) {
+          sys_lock_mutex(VIDEO_MUTEX);
+          sys_set_cursor(my_pid, col);
+          sys_write(pid_str);
+          sys_unlock_mutex(VIDEO_MUTEX);
+
+          sleep_period = ((SYS_GET_RAND()/my_pid) % 4) + 1;
+          sys_sleep(sleep_period);
+          total_sleep_period += sleep_period;
+
+          sys_lock_mutex(VIDEO_MUTEX);
+          sys_set_cursor(my_pid, col);
+          sys_write(".");                //may need to modify
+          sys_unlock_mutex(VIDEO_MUTEX);
+
+          col++;
     }
     sys_exit(total_sleep_period);
   }
