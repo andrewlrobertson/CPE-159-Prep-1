@@ -184,7 +184,11 @@ void SysUnlockMutex(void) {
 }
 
 void AlterStack(int pid, func_p_t p){
-
+	int addr;
+	//(char*)pcb[pid].tf_p - 4                //Lower trap frame by 4 bytes
+	//addr = pcb[pid].tf_p->eip;              //store eip
+	//(char*)pcb[pid].tf_p->eip =  (char*)p   //replace eip with 'p'
+	//insert original EIP into gap?
 }
 
 void SysExit(void){
