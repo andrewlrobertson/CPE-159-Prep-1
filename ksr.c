@@ -184,11 +184,12 @@ void SysUnlockMutex(void) {
 }
 
 void AlterStack(int pid, func_p_t p){
-	int addr;
-	//(char*)pcb[pid].tf_p - 4                //Lower trap frame by 4 bytes
-	//addr = pcb[pid].tf_p->eip;              //store eip
-	//(char*)pcb[pid].tf_p->eip =  (char*)p   //replace eip with 'p'
-	//insert original EIP into gap?
+	int old_eip;
+	old_eip = pcb[pid].tf_p->eip                                               //save old eip
+	MemCpy((char*)(pcb[pid].tf_p) - 4, (char*)pcb[pid].tf_p, sizeOf(tf_t))     //Lower trap frame by 4 bytes
+	(char*)pcb[pid].tf_p -= 4;                                                 //adjust tf pointer to new location
+	(char*)pcb[pid].tf_p->eip =  (char*)p                                      //replace eip with 'p'
+	*(int*)(pcb[pid].tf_p + 1) = old_eip                                       //place old eip in gap
 }
 
 void SysExit(void){
@@ -302,13 +303,13 @@ void SyscallSR(void) {
       case SYS_UNLOCK_MUTEX:  SysUnlockMutex();
                               break;
       case SYS_EXIT:          SysExit();
-			                        break;
+			      break;
       case SYS_WAIT:          SysWait();
-			                        break;
+			      break;
       case SYS_SIGNAL:        SysSignal();
-			                        break;
+			      break;
       case SYS_KILL:          SysKill();
-			                        break;
+			      break;
       default:             cons_printf("Kernel Panic: no such syscall!\n");
                            breakpoint();
    }
