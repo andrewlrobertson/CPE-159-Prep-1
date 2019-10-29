@@ -185,11 +185,11 @@ void SysUnlockMutex(void) {
 
 void AlterStack(int pid, func_p_t p){
 	int old_eip;
-	old_eip = pcb[pid].tf_p->eip                                               //save old eip
-	MemCpy((char*)(pcb[pid].tf_p) - 4, (char*)pcb[pid].tf_p, sizeOf(tf_t))     //Lower trap frame by 4 bytes
+	old_eip = pcb[pid].tf_p->eip;                                           //save old eip
+	MemCpy((char*)(pcb[pid].tf_p) - 4, (char*)pcb[pid].tf_p, sizeof(tf_t));     //Lower trap frame by 4 bytes
 	(char*)pcb[pid].tf_p -= 4;                                                 //adjust tf pointer to new location
-	(char*)pcb[pid].tf_p->eip =  (char*)p                                      //replace eip with 'p'
-	*(int*)(pcb[pid].tf_p + 1) = old_eip                                       //place old eip in gap
+	(char*)pcb[pid].tf_p->eip =  (char*)p;                                      //replace eip with 'p'
+	*(int*)(pcb[pid].tf_p + 1) = old_eip;                                       //place old eip in gap
 }
 
 void SysExit(void){
