@@ -48,7 +48,7 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
             i, col, exit_pid, exit_code,
             sleep_period, total_sleep_period;
 
-//sys_signal(SIGCHLD, MyChildExitHandler);
+sys_signal(SIGCHLD, MyChildExitHandler);
 
   for (i = 0; i < 5; i++){
     forked_pid = sys_fork();
