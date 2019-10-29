@@ -127,7 +127,7 @@ int sys_wait(int * exit_code) {
    return cpid;
 }
 
-void sys_signal(int signal_name, funct_p_t p) {
+void sys_signal(int signal_name, func_p_t p) {
   asm("movl %0, %%eax;
        movl %1, %%ebx;          // signal name
        movl %2, %%ecx;          // p
