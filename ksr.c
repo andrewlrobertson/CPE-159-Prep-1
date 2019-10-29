@@ -253,7 +253,7 @@ void SysWait(void){
    }
 }
 
-Void SysKill(void){
+void SysKill(void){
   int pid;
   int signal_name;
   int x;
