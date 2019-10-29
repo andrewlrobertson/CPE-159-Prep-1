@@ -93,7 +93,7 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
           sys_write(pid_str);
           sys_unlock_mutex(VIDEO_MUTEX);
 
-          sleep_period = ((SYS_GET_RAND()/my_pid) % 4) + 1;
+          sleep_period = ((sys_get_rand()/my_pid) % 4) + 1;
           sys_sleep(sleep_period);
           total_sleep_period += sleep_period;
 
