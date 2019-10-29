@@ -273,7 +273,7 @@ void SysKill(void){
 
 void SysSignal(void){
   int signal_name;
-  funct_p_t p;
+  func_p_t p;
 
   signal_name = pcb[run_pid].tf_p->ebx;
   p = pcb[run_pid].tf_p->ecx;
