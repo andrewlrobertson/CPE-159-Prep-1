@@ -63,6 +63,10 @@ void Init(void) {  // Init, PID 1, asks/tests various OS services
   Number2Str(my_pid, pid_str);
 
   if (forked_pid > 0){
+    sys_sleep(10);
+    sys_kill(0, SIGCONT);
+	  
+    while(1){
     sys_lock_mutex(VIDEO_MUTEX);
     sys_set_cursor(my_pid, 0);
     sys_write(pid_str);
