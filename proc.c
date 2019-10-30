@@ -43,9 +43,9 @@ void MyChildExitHandler(void){
 }
 
 void Init(void) {  // Init, PID 1, asks/tests various OS services
-  char pid_str[20], str[20];
+  char pid_str[20];
         int my_pid, forked_pid,
-            i, col, exit_pid, exit_code,
+            i, col,
             sleep_period, total_sleep_period;
 
 sys_signal(SIGCHLD, MyChildExitHandler);

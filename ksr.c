@@ -247,7 +247,7 @@ void SysWait(void){
    else{
 	   pcb[run_pid].tf_p->ecx = cpid;
 	   //need to modify exit code here
-	   *exit_code_ptr = pcb[run_pid].tf_p->ebx;
+	   *exit_code_ptr = pcb[cpid].tf_p->ebx;
 	   pcb[cpid].state = AVAIL;
      EnQue(cpid, &avail_que);
    }
