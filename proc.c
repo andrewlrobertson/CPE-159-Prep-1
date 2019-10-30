@@ -77,6 +77,7 @@ sys_signal(SIGCHLD, MyChildExitHandler);
     sys_lock_mutex(VIDEO_MUTEX);
     sys_set_cursor(my_pid, 0);
     sys_write("-");                  //may need to modify
+    if(my_pid > 9) sys_write("-");
     sys_unlock_mutex(VIDEO_MUTEX);
 
     sys_sleep(10);
@@ -100,6 +101,7 @@ sys_signal(SIGCHLD, MyChildExitHandler);
           sys_lock_mutex(VIDEO_MUTEX);
           sys_set_cursor(my_pid, col);
           sys_write(".");                //may need to modify
+          if (col==69) sys_write(".");  
           sys_unlock_mutex(VIDEO_MUTEX);
 
           col++;
