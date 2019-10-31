@@ -21,6 +21,7 @@ unsigned short *sys_cursor;
 unsigned int sys_time_count;
 mutex_t video_mutex;
 unsigned sys_rand_count;
+kb_t kb;
 
 struct i386_gate *idt;         // interrupt descriptor table
 
@@ -34,6 +35,7 @@ void BootStrap(void) {         // set up kernel!
    Bzero((char *)&avail_que, sizeof(que_t));
    Bzero((char *)&ready_que, sizeof(que_t));
 	 Bzero((char *)&video_mutex, sizeof(mutex_t));
+	 Bzero((char *)&kb, sizeof(kb_t));
    for(x = 0; x < PROC_MAX; x++){
       EnQue(x, &avail_que);
    }
