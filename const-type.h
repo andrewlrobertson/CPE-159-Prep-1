@@ -16,6 +16,7 @@
 #define PROC_MAX 20             // max number of processes
 #define STACK_MAX 4096          // process stack in bytes
 #define QUE_MAX 20              // capacity of a process queue
+#define STR_MAX 20
 
 #define VIDEO_MUTEX 0
 #define UNLOCKED 0
@@ -38,12 +39,14 @@
 #define SYS_WAIT 139
 #define SYS_SIGNAL 140
 #define SYS_KILL 141
+#define SYS_READ 142
+
 #define VIDEO_START (unsigned short *)0xb8000
 #define VIDEO_END ((unsigned short *)0xb8000 + 25 * 80)
 
 typedef void (*func_p_t)(void); // void-return function pointer type
 
-typedef enum {AVAIL, READY, RUN, SLEEP, SUSPEND, WAIT, ZOMBIE} state_t;
+typedef enum {AVAIL, READY, RUN, SLEEP, SUSPEND, WAIT, ZOMBIE, IO_WAIT} state_t;
 
 typedef struct{
    unsigned int
@@ -70,4 +73,8 @@ typedef struct{
    que_t suspend_que;
 } mutex_t;
 
+typedef struct{
+   que_t buffer[QUE_MAX];
+   que_t wait_que[QUE_MAX];
+} kb_t;
 #endif                          // to prevent name mangling
