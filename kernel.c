@@ -55,7 +55,7 @@ int main(void) {               // OS starts
    BootStrap();
 
    SpawnSR(Idle);
-   SpawnSR(Init);
+   SpawnSR(Login);
    run_pid = IDLE;
    //call Loader() to load the trapframe of Idle
    Loader(pcb[run_pid].tf_p);
