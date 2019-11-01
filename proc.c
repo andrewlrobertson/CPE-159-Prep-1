@@ -42,6 +42,25 @@ void MyChildExitHandler(void){
 
 }
 
+void Login(void) {
+      char login_str[STR_MAX], passwd_str[STR_MAX];
+
+      while(1) {
+         sys_write("login:");
+         sys_read(login_str);
+         sys_write("password:");
+         sys_read(passwd_str);
+
+         if (StrCmp(login_str, passwd_str) == 0){
+           sys_write("login successful!\r");  // break; in next prep
+         }
+         else{
+           sys_write("login failed!\r");
+         }
+      }
+//      sys_vfork(Shell);  // virtual-fork Shell (virtual memeory) phase8
+}
+
 void Init(void) {  // Init, PID 1, asks/tests various OS services
   char pid_str[20];
         int my_pid, forked_pid,
@@ -65,7 +84,7 @@ sys_signal(SIGCHLD, MyChildExitHandler);
   if (forked_pid > 0){
     sys_sleep(10);
     sys_kill(0, SIGCONT);
-	  
+
     while(1){
     sys_lock_mutex(VIDEO_MUTEX);
     sys_set_cursor(my_pid, 0);
@@ -101,7 +120,7 @@ sys_signal(SIGCHLD, MyChildExitHandler);
           sys_lock_mutex(VIDEO_MUTEX);
           sys_set_cursor(my_pid, col);
           sys_write(".");                //may need to modify
-          if (col==69) sys_write(".");  
+          if (col==69) sys_write(".");
           sys_unlock_mutex(VIDEO_MUTEX);
 
           col++;
