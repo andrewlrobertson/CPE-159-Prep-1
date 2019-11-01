@@ -84,6 +84,8 @@ void TimerSR(void) {
    }
 }
 
+void KBSR(void){}
+
 void SysSleep(void) {
    int sleep_sec;
    sleep_sec = pcb[run_pid].tf_p->ebx;
@@ -95,11 +97,13 @@ void SysSleep(void) {
 void SysWrite(void) {
   char* str;
   int offset;
+
   str = (char*)pcb[run_pid].tf_p->ebx;
 
   while (*str != '\0'){
     if(*str == '\r'){
-       sys_cursor -= sys_cursor % 80;
+       offset = (sys_cursor-VIDEO_START) % 80;
+       sys_cursor -= offset;
        sys_cursor += 80;
     }
     else{
