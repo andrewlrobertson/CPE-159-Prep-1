@@ -94,17 +94,34 @@ void SysSleep(void) {
 
 void SysWrite(void) {
   char* str;
+  int offset;
   str = (char*)pcb[run_pid].tf_p->ebx;
 
   while (*str != '\0'){
-    *sys_cursor = *str + VGA_MASK_VAL;
-    sys_cursor++;
+    if(*str == '\r'){
+       sys_cursor -= sys_cursor % 80;
+       sys_cursor += 80;
+    }
+    else{
+       *sys_cursor = *str + VGA_MASK_VAL;
+       sys_cursor++;
+    }
     str++;
     if(sys_cursor >= (VIDEO_END)){
+       sys_cursor = VIDEO_START;
+       while (sys_cursor < VIDEO_END){
+         *sys_cursor = ' ' + VGA_MASK_VAL;
+         sys_cursor++;
+       }
        sys_cursor = VIDEO_START;
     }
   }
 }
+/*
+if the character to be echoed is '\r,' instead of displaying it,
+   advance sys_cursor to the 1st column of next row,
+   when sys_cursor wraps back to VIDEO_START: erase the whole screen.
+*/
 
 void SysSetCursor(void){
    sys_cursor = (unsigned short *)(0xb8000 + 2 * ((pcb[run_pid].tf_p->ebx * 80) + pcb[run_pid].tf_p->ecx));
