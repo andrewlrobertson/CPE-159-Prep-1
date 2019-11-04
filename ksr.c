@@ -84,7 +84,23 @@ void TimerSR(void) {
    }
 }
 
-void KBSR(void){}
+void KBSR(void){
+  char ch;
+  int proc;
+  if(!cons_kbhit()) return;
+  ch = cons_getchar();
+  if(ch == '$') breakpoint();
+
+  if (QueEmpty(&kb.wait_que)){
+     EnQue((int)ch, &kb.buffer);
+   }
+  else{
+     proc = DeQue(&kb.wait_que);
+     EnQue(proc, ready_que);
+     pcb[proc].state = READY;
+     pcb[proc].tf_p->edx = (int)ch;   //there may be  a better place to put it
+   }
+}
 
 void SysSleep(void) {
    int sleep_sec;
