@@ -149,8 +149,9 @@ void sys_kill(int pid, int signal_name) {
  );
 }
 
-void sys_read(char *s){
+void sys_read(char *str){
      char ch;
+     char small[2];
      int i;
      i = 0;
      while( i <= (STR_MAX - 1)){
@@ -159,18 +160,22 @@ void sys_read(char *s){
             int $128;             //need to find correct interrupt
             movl %%ebx, %0"       //expecting character to return to ebx
            : "=g" (ch)
-           : "g" ()               //need correct code for eax on interrupt
+           : "g" (SYS_READ)               //need correct code for eax on interrupt
            : "eax", "ebx"
        );
 
+       small[0] = ch;
+       small[1] = '\0'
+       sys_write(small);
+
        if ((ch == '\r') || i == (STR_MAX-1)){
-         *s = '\0';
-         break;
+         *str = '\0';
+         return;
        }
        else{
-         *s = ch;
+         *str = ch;
        }
        i++;
-       s++;
+       str++;
      }
 }
