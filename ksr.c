@@ -100,6 +100,7 @@ void KBSR(void){
      pcb[proc].state = READY;
      pcb[proc].tf_p->edx = (int)ch;   //there may be  a better place to put it
    }
+   //still need to echo kb input to display
 }
 
 void SysSleep(void) {

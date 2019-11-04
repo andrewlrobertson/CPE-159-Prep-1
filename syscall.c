@@ -144,7 +144,33 @@ void sys_kill(int pid, int signal_name) {
        movl %2, %%ecx;          // signal name
        int $128"
       :
-      : "g" (SYS_KILL), "g" (pid), "g" (signal_name) 
+      : "g" (SYS_KILL), "g" (pid), "g" (signal_name)
       : "eax", "ebx", "ecx"
  );
+}
+
+void sys_read(char *s){
+     char ch;
+     int i;
+     i = 0;
+     while( i <= (STR_MAX - 1)){
+                                  //setup and make interrupt call to get a ch
+       asm("movl %1, %%eax;       //need to find correct interrupt
+            int $128;             //need to find correct interrupt
+            movl %%ebx, %0"       //expecting character to return to ebx
+           : "=g" (ch)
+           : "g" ()               //need correct code for eax on interrupt
+           : "eax", "ebx"
+       );
+
+       if ((ch == '\r') || i == (STR_MAX-1)){
+         *s = '\0';
+         break;
+       }
+       else{
+         *s = ch;
+       }
+       i++;
+       s++;
+     }
 }
