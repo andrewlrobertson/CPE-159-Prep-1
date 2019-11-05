@@ -80,3 +80,17 @@ void Number2Str(int x, char *str) {
      }
   }
 }
+
+int StrCmp(char* strA, char* strB){
+   int ret;
+   while(ret == 0){
+      if (*strA == '\0' && *strB == '\0') break;
+      else if (*strA != *strB) ret = 1;
+      else{
+         strA++;
+         strB++;
+      }
+
+   }
+   return ret;
+}

@@ -12,5 +12,6 @@ int DeQue(que_t *q);
 void Bzero(char *start, unsigned int max);
 void MemCpy(char *dst, char *src, unsigned int max);
 void Number2Str(int x, char *str);
+int StrCmp(char* strA, char* strB);
 #endif
 
