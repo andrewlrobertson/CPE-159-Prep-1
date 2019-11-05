@@ -167,7 +167,7 @@ void sys_read(char *str){
 
        ch = (char)temp;
        small[0] = ch;
-       small[1] = '\0'
+       small[1] = '\0';
        sys_write(small);
 
        if (ch == '\r'){
