@@ -151,6 +151,7 @@ void sys_kill(int pid, int signal_name) {
 
 void sys_read(char *str){
      char ch;
+     int temp;
      char small[2];
      int i;
      i = 0;
@@ -158,12 +159,13 @@ void sys_read(char *str){
 
        asm("movl %1, %%eax;
             int $128;
-            movl %%ebx, %0"       //may need movb and bl instead since char
-           : "=g" (ch)
+            movl %%ebx, %0"
+           : "=g" (temp)
            : "g" (SYS_READ)
            : "eax", "ebx"
        );
 
+       ch = (char)temp;
        small[0] = ch;
        small[1] = '\0'
        sys_write(small);

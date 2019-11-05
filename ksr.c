@@ -98,7 +98,7 @@ void KBSR(void){
      proc = DeQue(&kb.wait_que);
      EnQue(proc, ready_que);
      pcb[proc].state = READY;
-     pcb[proc].tf_p->edx = (int)ch;   //there may be  a better place to put it
+     pcb[proc].tf_p->ebx = (int)ch;   //unsure if this is the right place to put it
    }
 }
 
@@ -319,7 +319,16 @@ void SysSignal(void){
 }
 
 void SysRead(void){
-
+  int ch;
+  if(!QueEmpty(&kb.buffer)){
+    ch = DeQue(&kb.buffer);
+    pcb[run_pid].tf_p->ebx = ch;
+  }
+  else{
+    EnQue(run_pid, &kb.wait_que);
+    pcb[run_pid].state = IO_WAIT;
+    run_pid = NONE;
+  }
 }
 
 void SyscallSR(void) {
