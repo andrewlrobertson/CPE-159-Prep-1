@@ -20,5 +20,5 @@ void AlterStack(int pid, func_p_t p);
 void SysKill(void);
 void SysSignal(void);
 void KBSR(void);
-
+void SysRead(void);
 #endif

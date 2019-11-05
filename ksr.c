@@ -318,6 +318,10 @@ void SysSignal(void){
   pcb[run_pid].signal_handler[signal_name] = p;
 }
 
+void SysRead(void){
+
+}
+
 void SyscallSR(void) {
    switch ( pcb[run_pid].tf_p->eax)
    {
@@ -340,13 +344,15 @@ void SyscallSR(void) {
       case SYS_UNLOCK_MUTEX:  SysUnlockMutex();
                               break;
       case SYS_EXIT:          SysExit();
-			      break;
+			                        break;
       case SYS_WAIT:          SysWait();
-			      break;
+			                        break;
       case SYS_SIGNAL:        SysSignal();
-			      break;
+			                        break;
       case SYS_KILL:          SysKill();
-			      break;
+			                        break;
+      case SYS_READ:          SysRead();
+                        			break;
       default:             cons_printf("Kernel Panic: no such syscall!\n");
                            breakpoint();
    }
