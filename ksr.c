@@ -98,7 +98,7 @@ void KBSR(void){
      proc = DeQue(&(kb.wait_que));
      EnQue(proc, &ready_que);
      pcb[proc].state = READY;
-     pcb[proc].tf_p->ebx = (int)ch;   //unsure if this is the right place to put it
+     pcb[proc].tf_p->ebx = (int)ch;
    }
 }
 
@@ -137,11 +137,7 @@ void SysWrite(void) {
     }
   }
 }
-/*
-if the character to be echoed is '\r,' instead of displaying it,
-   advance sys_cursor to the 1st column of next row,
-   when sys_cursor wraps back to VIDEO_START: erase the whole screen.
-*/
+
 
 void SysSetCursor(void){
    sys_cursor = (unsigned short *)(0xb8000 + 2 * ((pcb[run_pid].tf_p->ebx * 80) + pcb[run_pid].tf_p->ecx));
@@ -230,9 +226,6 @@ void AlterStack(int pid, func_p_t p){
 }
 
 void SysExit(void){
-/*The exit service is to return an exit code to the parent process
-of the service-calling process, and the resources of the process
-are reclaimed by the OS.*/
 	int ppid, exit_code;
 
     exit_code = pcb[run_pid].tf_p->ebx;
