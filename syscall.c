@@ -154,13 +154,13 @@ void sys_read(char *str){
      char small[2];
      int i;
      i = 0;
-     while( i <= (STR_MAX - 1)){
-                                  //setup and make interrupt call to get a ch
-       asm("movl %1, %%eax;       //need to find correct interrupt
-            int $128;             //need to find correct interrupt
-            movl %%ebx, %0"       //expecting character to return to ebx
+     while( i < (STR_MAX - 1)){
+
+       asm("movl %1, %%eax;
+            int $128;
+            movl %%ebx, %0"       //may need movb and bl instead since char
            : "=g" (ch)
-           : "g" (SYS_READ)               //need correct code for eax on interrupt
+           : "g" (SYS_READ)
            : "eax", "ebx"
        );
 
@@ -168,14 +168,17 @@ void sys_read(char *str){
        small[1] = '\0'
        sys_write(small);
 
-       if ((ch == '\r') || i == (STR_MAX-1)){
+       if (ch == '\r'){
          *str = '\0';
          return;
        }
-       else{
-         *str = ch;
-       }
+       *str = ch;
        i++;
        str++;
+
+       if (i == STR_MAX - 1){
+         *str = '\0';
+         return;
+       }
      }
 }
