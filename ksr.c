@@ -96,7 +96,7 @@ void KBSR(void){
    }
   else{
      proc = DeQue(&(kb.wait_que));
-     EnQue(proc, ready_que);
+     EnQue(proc, &ready_que);
      pcb[proc].state = READY;
      pcb[proc].tf_p->ebx = (int)ch;   //unsure if this is the right place to put it
    }
