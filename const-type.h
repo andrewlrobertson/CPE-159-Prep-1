@@ -74,7 +74,7 @@ typedef struct{
 } mutex_t;
 
 typedef struct{
-   que_t buffer[QUE_MAX];
-   que_t wait_que[QUE_MAX];
+   que_t buffer;
+   que_t wait_que;
 } kb_t;
 #endif                          // to prevent name mangling
