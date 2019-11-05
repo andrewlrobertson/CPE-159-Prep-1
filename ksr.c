@@ -91,11 +91,11 @@ void KBSR(void){
   ch = cons_getchar();
   if(ch == '$') breakpoint();
 
-  if (QueEmpty(&kb.wait_que)){
-     EnQue((int)ch, &kb.buffer);
+  if (QueEmpty(&(kb.wait_que))){
+     EnQue((int)ch, &(kb.buffer));
    }
   else{
-     proc = DeQue(&kb.wait_que);
+     proc = DeQue(&(kb.wait_que));
      EnQue(proc, ready_que);
      pcb[proc].state = READY;
      pcb[proc].tf_p->ebx = (int)ch;   //unsure if this is the right place to put it
@@ -320,12 +320,12 @@ void SysSignal(void){
 
 void SysRead(void){
   int ch;
-  if(!QueEmpty(&kb.buffer)){
-    ch = DeQue(&kb.buffer);
+  if(!QueEmpty(&(kb.buffer))){
+    ch = DeQue(&(kb.buffer));
     pcb[run_pid].tf_p->ebx = ch;
   }
   else{
-    EnQue(run_pid, &kb.wait_que);
+    EnQue(run_pid, &(kb.wait_que));
     pcb[run_pid].state = IO_WAIT;
     run_pid = NONE;
   }
