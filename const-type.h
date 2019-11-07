@@ -64,6 +64,15 @@ typedef struct{
 } pcb_t;
 
 typedef struct{
+   int pid;
+   union{
+      unsigned addr; // its byte address (starting DRAM 0xe00000)
+      char *content; // use its addr as ptr to content (bytes)
+      unsigned *entry; // use its addr as an 'entry' array
+   } u;
+} page_t;
+
+typedef struct{
    int tail;
    int que[QUE_MAX];
 } que_t;
