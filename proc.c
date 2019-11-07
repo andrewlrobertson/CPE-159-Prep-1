@@ -58,7 +58,7 @@ void Login(void) {
            sys_write("login failed!\r");
          }
       }
-//      sys_vfork(Shell);  // virtual-fork Shell (virtual memeory) phase8
+      sys_vfork(Shell);  // virtual-fork Shell (virtual memeory) phase8
 
 }
 
