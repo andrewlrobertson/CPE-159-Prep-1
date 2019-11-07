@@ -6,6 +6,7 @@
 void Idle(void);
 void Init(void);
 void MyChildExitHandler(void);
+void ShellDir(void);
 void Shell(void);
 void Login(void);
 
