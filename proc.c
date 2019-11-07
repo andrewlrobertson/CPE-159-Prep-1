@@ -46,19 +46,35 @@ void ShellDir(void){
 	sys_write("/boot/\r");
 }
 
+void ShellRoll(void){
+	int die1, die2;
+	die1 = (sys_get_rand()%6 + 1);
+	die2 = (sys_get_rand()%6 + 1);
+	sys_exit(die1+die2);
+}
+
 void Shell(void){
         char command[STR_MAX];
+	char str[STR_MAX];
+	int roll;
 	while(1){
 		sys_write("smooth_operators>");
 		sys_read(command);
 		// Following is a simple C program  
 		switch (command) { 
-			case "ShellDir": sys_vfork(ShellDir); 
-				break; 
-			case "ShellCal": sys_vfork(ShellCal); 
-				break; 
-			case "ShellRoll": sys_vfork(ShellRoll); 
-				break; 
+			case "ShellDir": 
+					sys_vfork(ShellDir); 
+					break; 
+			case "ShellCal": 
+					sys_vfork(ShellCal); 
+					break; 
+			case "ShellRoll": 
+					sys_wait(&roll);
+					sys_vfork(ShellRoll);
+					Number2Str(roll, str);
+					sys_write(str);
+					sys_write("\r");
+					break; 
 			default: printf("Valid commands are:\rShellDir\rShellCal\rShellRoll\r"); 
 				break; 
 		} 
