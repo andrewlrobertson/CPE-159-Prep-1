@@ -75,7 +75,12 @@ void Shell(void){
 					sys_write(str);
 					sys_write("\r");
 					break; 
-			default: printf("Valid commands are:\rdir\rcal\rroll\r"); 
+			default: 
+					sys_write("\r   Valid commands are:\r);
+				        sys_write("      dir -- displays directory content\r");
+					sys_write("      cal -- displays calendar\r");
+				        sys_write("      roll -- roll a pair of die\r");
+					
 				break; 
 		} 
 
