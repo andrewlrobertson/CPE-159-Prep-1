@@ -42,6 +42,26 @@ void MyChildExitHandler(void){
 
 }
 
+void Shell(void){
+        char command[STR_MAX];
+	while(1){
+		sys_write("smooth_operators>");
+		sys_read(command);
+		// Following is a simple C program  
+		switch (command) { 
+			case "ShellDir": sys_vfork(ShellDir); 
+				break; 
+			case "ShellCal": sys_vfork(ShellCal); 
+				break; 
+			case "ShellRoll": sys_vfork(ShellRoll); 
+				break; 
+			default: printf("Valid commands are:\rShellDir\rShellCal\rShellRoll\r"); 
+				break; 
+		} 
+
+	}
+}
+
 void Login(void) {
       char login_str[STR_MAX], passwd_str[STR_MAX];
 
