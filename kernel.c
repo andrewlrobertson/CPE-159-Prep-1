@@ -23,7 +23,7 @@ mutex_t video_mutex;
 unsigned sys_rand_count;
 kb_t kb;
 unsigned KDir;
-page_t page[100];
+page_t page[PAGE_MAX];
 
 struct i386_gate *idt;         // interrupt descriptor table
 
@@ -33,6 +33,10 @@ void BootStrap(void) {         // set up kernel!
 	sys_time_count = 0;
 	sys_rand_count = 0;
 	sys_cursor = VIDEO_START;
+	KDir = get_cr3();
+	for (x = 0; x < PAGE_MAX; x++){
+		page[x].pid = NONE;
+	}
 
    Bzero((char *)&avail_que, sizeof(que_t));
    Bzero((char *)&ready_que, sizeof(que_t));
