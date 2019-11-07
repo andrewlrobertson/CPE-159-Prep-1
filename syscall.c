@@ -157,13 +157,16 @@ void sys_read(char *str){
      i = 0;
      while( i < (STR_MAX - 1)){
 
-       asm("movl %1, %%eax;
+       /*asm("movl %1, %%eax;
             int $128;
             movl %%ebx, %0"
            : "=g" (temp)
            : "g" (SYS_READ)
            : "eax", "ebx"
-       );
+       );*/
+	     
+       while(QueEmpty(&kb.buffer))sys_sleep(1);
+       ch = DeQue(&kb.buffer);
 
        ch = (char)temp;
        small[0] = ch;
