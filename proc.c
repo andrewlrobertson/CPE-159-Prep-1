@@ -42,6 +42,10 @@ void MyChildExitHandler(void){
 
 }
 
+void ShellDir(void){
+	sys_write("/boot/\r");
+}
+
 void Shell(void){
         char command[STR_MAX];
 	while(1){
