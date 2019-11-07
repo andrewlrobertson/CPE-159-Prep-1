@@ -44,6 +44,15 @@
 #define VIDEO_START (unsigned short *)0xb8000
 #define VIDEO_END ((unsigned short *)0xb8000 + 25 * 80)
 
+#define SYS_VFORK 143   //creation of a virtual-space running process
+#define PAGE_MAX 100    //OS has 100 DRAM pages to dispatch
+#define PAGE_SIZE 4096  //each page size in bytes
+#define G1 0x40000000   //virtual space starts
+#define G2 0x80000000   //vitual space ends (1 less byte)
+#define PRESENT 0x01    //page present flag
+#define RW 0x02         //page is both read & writable
+#define RO 0x00         //page is read only
+
 typedef void (*func_p_t)(void); // void-return function pointer type
 
 typedef enum {AVAIL, READY, RUN, SLEEP, SUSPEND, WAIT, ZOMBIE, IO_WAIT} state_t;
