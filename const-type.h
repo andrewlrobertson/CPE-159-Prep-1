@@ -69,6 +69,7 @@ typedef struct{
    unsigned int total_time;
    unsigned int wake_time;
    unsigned int ppid;
+   unsigned Dir;
    func_p_t signal_handler[32];
 } pcb_t;
 
