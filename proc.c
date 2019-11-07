@@ -62,20 +62,20 @@ void Shell(void){
 		sys_read(command);
 		// Following is a simple C program  
 		switch (command) { 
-			case "ShellDir": 
+			case "dir": 
 					sys_vfork(ShellDir); 
 					break; 
-			case "ShellCal": 
+			case "cal": 
 					sys_vfork(ShellCal); 
 					break; 
-			case "ShellRoll": 
+			case "roll": 
 					sys_wait(&roll);
 					sys_vfork(ShellRoll);
 					Number2Str(roll, str);
 					sys_write(str);
 					sys_write("\r");
 					break; 
-			default: printf("Valid commands are:\rShellDir\rShellCal\rShellRoll\r"); 
+			default: printf("Valid commands are:\rdir\rcal\rroll\r"); 
 				break; 
 		} 
 
