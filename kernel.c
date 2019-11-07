@@ -22,6 +22,8 @@ unsigned int sys_time_count;
 mutex_t video_mutex;
 unsigned sys_rand_count;
 kb_t kb;
+unsigned KDir;
+page_t page[100];
 
 struct i386_gate *idt;         // interrupt descriptor table
 
