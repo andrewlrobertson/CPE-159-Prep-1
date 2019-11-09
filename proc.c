@@ -53,36 +53,50 @@ void ShellRoll(void){
 	sys_exit(die1+die2);
 }
 
+void VforkOutput(int exit_code, int exit_pid){
+  char str[STR_MAX];
+  char str2[STR_MAX];
+  Number2Str(exit_pid, str);
+  Number2Str(exit_code, str2);
+  sys_write("Exited PID: ");
+  sys_write(exit_pid);
+  sys_write("   Exit Code: ");
+  sys_write(exit_code);
+  sys_write("\r");
+}
+
 void Shell(void){
-        char command[STR_MAX];
-	char str[STR_MAX];
-	int roll;
+  char command[STR_MAX];
+	int exit_code;
+  int exit_pid;
 	while(1){
 		sys_write("smooth_operators>");
 		sys_read(command);
-		// Following is a simple C program  
-		switch (command) { 
-			case "dir": 
-					sys_vfork(ShellDir); 
-					break; 
-			case "cal": 
-					sys_vfork(ShellCal); 
-					break; 
-			case "roll": 
-					sys_wait(&roll);
+		// Following is a simple C program
+		switch (command) {
+			case "dir":
+          exit_pid = sys_wait(&exit_code);
+					sys_vfork(ShellDir);
+          VforkOutput(exit_code,exit_pid);
+					break;
+			case "cal":
+          exit_pid = sys_wait(&exit_code); 
+					sys_vfork(ShellCal);
+          VforkOutput(exit_code,exit_pid);
+					break;
+			case "roll":
+					exit_pid = sys_wait(&exit_code);
 					sys_vfork(ShellRoll);
-					Number2Str(roll, str);
-					sys_write(str);
-					sys_write("\r");
-					break; 
-			default: 
+          VforkOutput(exit_code,exit_pid);
+					break;
+			default:
 					sys_write("\r   Valid commands are:\r);
-				        sys_write("      dir -- displays directory content\r");
+				  sys_write("      dir -- displays directory content\r");
 					sys_write("      cal -- displays calendar\r");
-				        sys_write("      roll -- roll a pair of die\r");
-					
-				break; 
-		} 
+				  sys_write("      roll -- roll a pair of die\r");
+
+				break;
+		}
 
 	}
 }
