@@ -43,7 +43,9 @@ void MyChildExitHandler(void){
 }
 
 void ShellDir(void){
+  sys_lock_mutex(VIDEO_MUTEX);
 	sys_write("/boot/\r");
+  sys_unlock_mutex(VIDEO_MUTEX);
   sys_exit(0);
 }
 
@@ -55,6 +57,7 @@ void ShellRoll(void){
 }
 
 void ShellCal(void){
+  sys_lock_mutex(VIDEO_MUTEX);
 	sys_write("\r");
   sys_write("      November 2019\r");
   sys_write("   Su Mo Tu We Th Fr Sa\r");
@@ -63,6 +66,7 @@ void ShellCal(void){
   sys_write("   10 11 12 13 14 15 16\r");
   sys_write("   17 18 19 20 21 22 23\r");
   sys_write("   24 25 26 27 28 29 30\r");
+  sys_unlock_mutex(VIDEO_MUTEX);
   sys_exit(0);
 }
 
@@ -71,11 +75,13 @@ void VforkOutput(int exit_code, int exit_pid){
   char str2[STR_MAX];
   Number2Str(exit_pid, str);
   Number2Str(exit_code, str2);
+  sys_lock_mutex(VIDEO_MUTEX);
   sys_write("Exited PID: ");
   sys_write(exit_pid);
   sys_write("   Exit Code: ");
   sys_write(exit_code);
   sys_write("\r");
+  sys_unlock_mutex(VIDEO_MUTEX);
 }
 
 void Shell(void){
