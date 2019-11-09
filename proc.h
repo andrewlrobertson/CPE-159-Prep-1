@@ -8,6 +8,7 @@ void Init(void);
 void MyChildExitHandler(void);
 void ShellDir(void);
 void ShellRoll(void);
+void ShellCal(void);
 void Shell(void);
 void Login(void);
 
