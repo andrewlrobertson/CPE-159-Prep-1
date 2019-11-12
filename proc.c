@@ -137,7 +137,7 @@ void Login(void) {
            sys_write("login failed!\r");
          }
       }
-
+      sys_exit(0);
 }
 
 void Init(void) {  // Init, PID 1, asks/tests various OS services
