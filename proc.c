@@ -109,7 +109,7 @@ void Shell(void){
           VforkOutput(exit_code,exit_pid);
 					break;
 			default:
-					sys_write("\r   Valid commands are:\r);
+					sys_write("\r   Valid commands are:\r");
 				  sys_write("      dir -- displays directory content\r");
 					sys_write("      cal -- displays calendar\r");
 				  sys_write("      roll -- roll a pair of die\r");
