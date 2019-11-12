@@ -364,4 +364,5 @@ void SyscallSR(void) {
       EnQue(run_pid, &ready_que);
       run_pid = NONE;
    }
+   set_cr3(KDir);
 }
