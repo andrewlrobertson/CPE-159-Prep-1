@@ -98,7 +98,9 @@ void KBSR(void){
      proc = DeQue(&(kb.wait_que));
      EnQue(proc, &ready_que);
      pcb[proc].state = READY;
+     set_cr3(pcb[proc].Dir);
      pcb[proc].tf_p->ebx = (int)ch;
+     set_cr3(KDir);
    }
 }
 
@@ -218,17 +220,19 @@ void SysUnlockMutex(void) {
 
 void AlterStack(int pid, func_p_t p){
 	int old_eip;
+  set_cr3(pcb[pid].Dir);
 	old_eip = pcb[pid].tf_p->eip;                                           //save old eip
 	MemCpy((char*)(pcb[pid].tf_p) - 4, (char*)pcb[pid].tf_p, sizeof(tf_t));     //Lower trap frame by 4 bytes
 	(char*)pcb[pid].tf_p -= 4;                                                 //adjust tf pointer to new location
 	(char*)pcb[pid].tf_p->eip =  (char*)p;                                      //replace eip with 'p'
 	*(int*)(pcb[pid].tf_p + 1) = old_eip;                                       //place old eip in gap
+  set_cr3(KDir);
 }
 
 void SysExit(void){
 	int ppid, exit_code;
 
-    exit_code = pcb[run_pid].tf_p->ebx;
+  exit_code = pcb[run_pid].tf_p->ebx;
 	ppid = pcb[run_pid].ppid;
 
 	if(pcb[ppid].state != WAIT){
@@ -247,6 +251,7 @@ void SysExit(void){
 			EnQue(ppid, &ready_que);
          //also:
             //pass over exiting PID to parent
+      set_cr3(pcb[ppid].Dir); //will be restored to real memory adressing @ end of SyscallSR
 			pcb[ppid].tf_p->ecx = run_pid;
             //pass over exit code to parent
 			*(int*)pcb[ppid].tf_p->ebx = exit_code;
@@ -277,6 +282,7 @@ void SysWait(void){
    else{
 	   pcb[run_pid].tf_p->ecx = cpid;
 	   //need to modify exit code here
+     set_cr3(pcb[cpid].Dir); //will be restored to real memory adressing @ end of SyscallSR
 	   *exit_code_ptr = pcb[cpid].tf_p->ebx;
 	   pcb[cpid].state = AVAIL;
      EnQue(cpid, &avail_que);
