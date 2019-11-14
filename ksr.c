@@ -324,6 +324,8 @@ void SysRead(void){
   }
 }
 
+void SysVfork(void){}
+
 void SyscallSR(void) {
    switch ( pcb[run_pid].tf_p->eax)
    {
@@ -355,6 +357,8 @@ void SyscallSR(void) {
 			                        break;
       case SYS_READ:          SysRead();
                         			break;
+      case SYS_VFORK:         SysVfork();
+                              break;
       default:             cons_printf("Kernel Panic: no such syscall!\n");
                            breakpoint();
    }

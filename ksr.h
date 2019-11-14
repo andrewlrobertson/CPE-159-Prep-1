@@ -21,4 +21,5 @@ void SysKill(void);
 void SysSignal(void);
 void KBSR(void);
 void SysRead(void);
+void SysVfork(void);
 #endif
