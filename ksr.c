@@ -405,7 +405,7 @@ void SysVfork(void){
 
   MemCpy((char*)page[IP].u.addr, (char*)funct, PAGE_SIZE);      //build IP page
 
-  page[DP].u.entry[1023] = EF_DEF;     //build DP page
+  page[DP].u.entry[1023] = EF_DEFAULT_VALUE | EF_INTR;     //build DP page
   page[DP].u.entry[1022] = get_cs();
   page[DP].u.entry[1021] = G1;
 
