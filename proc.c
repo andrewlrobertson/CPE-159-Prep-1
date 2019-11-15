@@ -77,9 +77,9 @@ void VforkOutput(int exit_code, int exit_pid){
   Number2Str(exit_code, str2);
   sys_lock_mutex(VIDEO_MUTEX);
   sys_write("Exited PID: ");
-  sys_write(exit_pid);
+  sys_write(str);
   sys_write("   Exit Code: ");
-  sys_write(exit_code);
+  sys_write(str2);
   sys_write("\r");
   sys_unlock_mutex(VIDEO_MUTEX);
 }
@@ -92,30 +92,27 @@ void Shell(void){
 		sys_write("smooth_operators>");
 		sys_read(command);
 		// Following is a simple C program
-		switch (command) {
-			case "dir":
+			if(StrCmp(command , "dir") == 0){
           exit_pid = sys_wait(&exit_code);
 					sys_vfork(ShellDir);
           VforkOutput(exit_code,exit_pid);
-					break;
-			case "cal":
+			}
+			else if(StrCmp(command, "cal") == 0){
           exit_pid = sys_wait(&exit_code);
 					sys_vfork(ShellCal);
           VforkOutput(exit_code,exit_pid);
-					break;
-			case "roll":
+			}
+			else if(StrCmp(command, "roll") == 0){
 					exit_pid = sys_wait(&exit_code);
 					sys_vfork(ShellRoll);
           VforkOutput(exit_code,exit_pid);
-					break;
-			default:
+			}
+			else{
 					sys_write("\r   Valid commands are:\r");
 				  sys_write("      dir -- displays directory content\r");
 					sys_write("      cal -- displays calendar\r");
 				  sys_write("      roll -- roll a pair of die\r");
-				break;
-		}
-
+			}
 	}
 }
 
