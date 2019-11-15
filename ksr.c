@@ -334,47 +334,71 @@ void SysRead(void){
 }
 
 void SysVfork(void){
-  /*
-  for the 5 page indices: int Dir, IT, DT, IP, DP
 
-   allocate a new pid
-   queue it to ready_que
-   copy PCB from parent process but change 5 places:
-      state, ppid, two time counts, and tf_p (see below)
+  int DIR, IT, DT, IP, DP, x, i, pid;
+  int indices[5];
+  func_p_t funct;
+  unsigned * KDir_ptr;
+  i = 0;
+  x = 0;
+  funct = (func_p_t)pcb[run_pid].tf_p->ebx;
+  KDir_ptr = &KDir;
 
-   look into all pages to allocate 5 pages:
-      if it's not used by any process, copy its array index
-      if we got enough (5) indices -> break the loop
+  pid = DeQue(&avail_que);
+	if (pid == NONE){
+		pcb[run_pid].tf_p->ecx = NONE;
+		return;
+	}
+	EnQue(pid, &ready_que);
+  pcb[pid] = pcb[run_pid];
+	pcb[pid].state = READY;
+	pcb[pid].time_count = 0;
+	pcb[pid].total_time = 0;
+	pcb[pid].ppid = run_pid;
+  pcb[pid].tf_p = G2 - sizeof(tf_t);
+  while(i<5){          //while we have less than five pages
+   //look for a page
+     if(page[x].pid == NONE){
+        indices[i] = x;
+        i++;
+     }
+     x++;
+     if (x == PAGE_MAX || i == 5) break;
+  }
 
-   if less than 5 indices obtained:
-      show panic msg: don't have enough pages, breakpoint()
+  if (i<5) {
+    cons_printf("NOT ENOUGH PAGES!");
+    breakpoint();
+  }
 
-   set the five pages to be occupied by the new pid
-   clear the content part of the five pages
+  for(x = 0; x < 5, x++){
+     page[indices[x]].pid = pid;
+     Bzero(page[indices[x]].addr, sizeof(PAGE_SIZE));
+  }
 
-   build Dir page
-      copy the first 16 entries from KDir to Dir
-      set entry 256 to the address of IT page (bitwise-or-ed
-      with the present and read/writable flags)
-      set entry 511 to the address of DT page (bitwise-or-ed
-      with the present and read/writable flags)
-   build IT page
-      set entry 0 to the address of IP page (bitwise-or-ed
-      with the present and read-only flags)
-   build DT page
-      set entry 1023 to the address of DP page (bitwise-or-ed
-      with the present and read/writable flags)
-   build IP
-      copy instructions to IP (src addr is ebx of TF)
-   build DP
-      the last in u.entry[] is efl, = EF_DEF... (like SpawnSR)
-      2nd to last in u.entry[] is cs = get_cs()
-      3rd to last in u.entry[] is eip = G1
+  DIR = indices[0];
+  IT = indices[1];
+  DT = indices[2];
+  IP = indices[3];
+  DP = indices[4];
 
-   copy u.addr of Dir page to Dir in PCB of the new process
-   tf_p in PCB of new process = G2 minus the size of a trapframe
+  for(x = 0; x < 16; x++){                //build DIR page
+     page[DIR].u.entry[x] = KDir_ptr[x];
+  }
+  page[DIR].u.entry[256] = (page[IT].u.addr | PRESENT | RW);
+  page[DIR].u.entry[512] = (page[DT].u.addr | PRESENT | RW);
 
-  */
+  page[IT].u.entry[0] = (page[IP].u.addr | PRESENT | RO);       // build IT page
+
+  page[DT].u.entry[1023] = (page[DP].u.addr | PRESENT | RW);     // build DT page
+
+  MemCpy(page[IP].u.addr, funct, PAGE_SIZE);      //build IP page
+
+  page[DP].u.entry[1023] = EF_DEF;     //build DP page
+  page[DP].u.entry[1022] = get_cs();
+  page[DP].u.entry[1021] = G1;
+
+  pcb[pid].Dir = page[DIR].u.addr;
 }
 
 void SyscallSR(void) {
