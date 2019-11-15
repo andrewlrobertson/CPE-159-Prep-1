@@ -20,7 +20,8 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
 
    //get 'pid'
    pid = DeQue(&avail_que);
-
+   pcb[pid].Dir = KDir;
+   page[pid].pid = pid;
    //use a tool function to clear the content of PCB of process 'pid'
    Bzero((char *)&pcb[pid], sizeof(pcb_t));
 
@@ -155,6 +156,8 @@ void SysFork(void){
 		pcb[run_pid].tf_p->ebx = NONE;
 		return;
 	}
+  pcb[pid].Dir = KDir;
+  page[pid].pid = pid;
 	EnQue(pid, &ready_que);
 	pcb[pid] = pcb[run_pid];
 	pcb[pid].state = READY;
@@ -330,7 +333,49 @@ void SysRead(void){
   }
 }
 
-void SysVfork(void){}
+void SysVfork(void){
+  /*
+  for the 5 page indices: int Dir, IT, DT, IP, DP
+
+   allocate a new pid
+   queue it to ready_que
+   copy PCB from parent process but change 5 places:
+      state, ppid, two time counts, and tf_p (see below)
+
+   look into all pages to allocate 5 pages:
+      if it's not used by any process, copy its array index
+      if we got enough (5) indices -> break the loop
+
+   if less than 5 indices obtained:
+      show panic msg: don't have enough pages, breakpoint()
+
+   set the five pages to be occupied by the new pid
+   clear the content part of the five pages
+
+   build Dir page
+      copy the first 16 entries from KDir to Dir
+      set entry 256 to the address of IT page (bitwise-or-ed
+      with the present and read/writable flags)
+      set entry 511 to the address of DT page (bitwise-or-ed
+      with the present and read/writable flags)
+   build IT page
+      set entry 0 to the address of IP page (bitwise-or-ed
+      with the present and read-only flags)
+   build DT page
+      set entry 1023 to the address of DP page (bitwise-or-ed
+      with the present and read/writable flags)
+   build IP
+      copy instructions to IP (src addr is ebx of TF)
+   build DP
+      the last in u.entry[] is efl, = EF_DEF... (like SpawnSR)
+      2nd to last in u.entry[] is cs = get_cs()
+      3rd to last in u.entry[] is eip = G1
+
+   copy u.addr of Dir page to Dir in PCB of the new process
+   tf_p in PCB of new process = G2 minus the size of a trapframe
+
+  */
+}
 
 void SyscallSR(void) {
    switch ( pcb[run_pid].tf_p->eax)
