@@ -2,6 +2,8 @@
 // system service calls for kernel services
 
 #include "const-type.h"     // for SYS_GET_PID, etc., below
+#include "ext-data.h"
+#include "tools.h"
 
 int sys_get_pid(void) {
    int pid;
@@ -156,7 +158,7 @@ void sys_read(char *str){
      i = 0;
      while( i < (STR_MAX - 1)){
        while(QueEmpty(&kb.buffer))sys_sleep(1);
-       ch = DeQue(&kb.buffer)
+       ch = DeQue(&kb.buffer);
        small[0] = ch;
        small[1] = '\0';
        sys_write(small);
