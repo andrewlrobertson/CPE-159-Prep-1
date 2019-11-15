@@ -233,7 +233,7 @@ void AlterStack(int pid, func_p_t p){
 }
 
 void SysExit(void){
-	int ppid, exit_code;
+	int ppid, exit_code, x;
 
   exit_code = pcb[run_pid].tf_p->ebx;
 	ppid = pcb[run_pid].ppid;
@@ -254,7 +254,7 @@ void SysExit(void){
 			EnQue(ppid, &ready_que);
          //also:
             //pass over exiting PID to parent
-      set_cr3(pcb[ppid].Dir); //will be restored to real memory adressing @ end of SyscallSR
+      set_cr3(pcb[ppid].Dir);
 			pcb[ppid].tf_p->ecx = run_pid;
             //pass over exit code to parent
 			*(int*)pcb[ppid].tf_p->ebx = exit_code;
@@ -263,6 +263,10 @@ void SysExit(void){
 			pcb[run_pid].state = AVAIL;
 			EnQue(run_pid, &avail_que);
             //no running process anymore
+      for(x = 0; x < PAGE_MAX; x++){
+        if(page[x].pid == run_pid) page[x].pid = NONE;
+      }
+      set_cr3(KDir);
 			run_pid = NONE;
 	}
 }
@@ -289,6 +293,10 @@ void SysWait(void){
 	   *exit_code_ptr = pcb[cpid].tf_p->ebx;
 	   pcb[cpid].state = AVAIL;
      EnQue(cpid, &avail_que);
+     for(x = 0; x < PAGE_MAX; x++){
+       if(page[x].pid == cpid) page[x].pid = NONE;
+     }
+     set_cr3(KDir);
    }
 }
 
@@ -358,7 +366,7 @@ void SysVfork(void){
 	pcb[pid].total_time = 0;
 	pcb[pid].ppid = run_pid;
   pcb[pid].tf_p = G2 - sizeof(tf_t);
-  
+
   while(i<5){          //while we have less than five pages
    //look for a page
      if(page[x].pid == NONE){
