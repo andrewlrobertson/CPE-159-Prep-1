@@ -365,7 +365,7 @@ void SysVfork(void){
 	pcb[pid].time_count = 0;
 	pcb[pid].total_time = 0;
 	pcb[pid].ppid = run_pid;
-  pcb[pid].tf_p =(tf_p)(G2 - sizeof(tf_t));
+  pcb[pid].tf_p =(tf_t *)(G2 - sizeof(tf_t));
 
   while(i<5){          //while we have less than five pages
    //look for a page
@@ -384,7 +384,7 @@ void SysVfork(void){
 
   for(x = 0; x < 5; x++){
      page[indices[x]].pid = pid;
-     Bzero(page[indices[x]].addr, sizeof(PAGE_SIZE));
+     Bzero((char*)page[indices[x]].u.addr, sizeof(PAGE_SIZE));
   }
 
   DIR = indices[0];
@@ -403,7 +403,7 @@ void SysVfork(void){
 
   page[DT].u.entry[1023] = (page[DP].u.addr | PRESENT | RW);     // build DT page
 
-  MemCpy(page[IP].u.addr, funct, PAGE_SIZE);      //build IP page
+  MemCpy((char*)page[IP].u.addr, (char*)funct, PAGE_SIZE);      //build IP page
 
   page[DP].u.entry[1023] = EF_DEF;     //build DP page
   page[DP].u.entry[1022] = get_cs();
