@@ -36,7 +36,7 @@ void BootStrap(void) {         // set up kernel!
 	KDir = get_cr3();
 	for (x = 0; x < PAGE_MAX; x++){
 		page[x].pid = NONE;
-		page[i].u.addr = DRAM_START + i * PAGE_SIZE;
+		page[x].u.addr = DRAM_START + x * PAGE_SIZE;
 	}
 
    Bzero((char *)&avail_que, sizeof(que_t));

@@ -365,7 +365,7 @@ void SysVfork(void){
 	pcb[pid].time_count = 0;
 	pcb[pid].total_time = 0;
 	pcb[pid].ppid = run_pid;
-  pcb[pid].tf_p = G2 - sizeof(tf_t);
+  pcb[pid].tf_p =(tf_p)(G2 - sizeof(tf_t));
 
   while(i<5){          //while we have less than five pages
    //look for a page
@@ -382,7 +382,7 @@ void SysVfork(void){
     breakpoint();
   }
 
-  for(x = 0; x < 5, x++){
+  for(x = 0; x < 5; x++){
      page[indices[x]].pid = pid;
      Bzero(page[indices[x]].addr, sizeof(PAGE_SIZE));
   }
