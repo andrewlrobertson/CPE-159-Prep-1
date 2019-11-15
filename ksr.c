@@ -334,11 +334,11 @@ void SysRead(void){
 }
 
 void SysVfork(void){
-
   int DIR, IT, DT, IP, DP, x, i, pid;
   int indices[5];
   func_p_t funct;
   unsigned * KDir_ptr;
+
   i = 0;
   x = 0;
   funct = (func_p_t)pcb[run_pid].tf_p->ebx;
@@ -349,6 +349,8 @@ void SysVfork(void){
 		pcb[run_pid].tf_p->ecx = NONE;
 		return;
 	}
+  pcb[run_pid].tf_p->ecx = pid;
+
 	EnQue(pid, &ready_que);
   pcb[pid] = pcb[run_pid];
 	pcb[pid].state = READY;
@@ -356,6 +358,7 @@ void SysVfork(void){
 	pcb[pid].total_time = 0;
 	pcb[pid].ppid = run_pid;
   pcb[pid].tf_p = G2 - sizeof(tf_t);
+  
   while(i<5){          //while we have less than five pages
    //look for a page
      if(page[x].pid == NONE){
