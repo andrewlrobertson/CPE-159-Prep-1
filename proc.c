@@ -127,8 +127,8 @@ void Login(void) {
 
          if (StrCmp(login_str, passwd_str) == 0){
            sys_write("login successful!\r");  // break; in next prep
-	   sys_vfork(Shell);  // virtual-fork Shell (virtual memeory) phase8
-	   break;
+	         sys_vfork(Shell);  // virtual-fork Shell (virtual memeory) phase8
+	         break;
          }
          else{
            sys_write("login failed!\r");
