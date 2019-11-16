@@ -175,15 +175,13 @@ void sys_read(char *str){
      }
 }
 
-int sys_vfork(func_p_t p) {
+void sys_vfork(func_p_t p) {
    int pid;
    asm("movl %1, %%eax;
 	      movl %2, %%ebx;     //function pointer
         int $128;
-        movl %%ecx, %0"     //pid
-       : "=g" (pid)
+       :
        : "g" (SYS_VFORK), "g" (p)
        : "eax", "ebx" , "ecx"
    );
-   return pid;
 }

@@ -356,7 +356,6 @@ void SysVfork(void){
 		pcb[run_pid].tf_p->ecx = NONE;
 		return;
 	}
-  pcb[run_pid].tf_p->ecx = pid;
 
 	EnQue(pid, &ready_que);
   pcb[pid] = pcb[run_pid];
