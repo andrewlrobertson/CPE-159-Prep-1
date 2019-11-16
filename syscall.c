@@ -179,7 +179,7 @@ void sys_vfork(func_p_t p) {
    int pid;
    asm("movl %0, %%eax;
 	      movl %1, %%ebx;     //function pointer
-        int $128;
+        int $128"
        :
        : "g" (SYS_VFORK), "g" (p)
        : "eax", "ebx"
