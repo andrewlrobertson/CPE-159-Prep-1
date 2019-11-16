@@ -352,11 +352,6 @@ void SysVfork(void){
   KDir_ptr = &KDir;
 
   pid = DeQue(&avail_que);
-	if (pid == NONE){
-		pcb[run_pid].tf_p->ecx = NONE;
-		return;
-	}
-
 	EnQue(pid, &ready_que);
   pcb[pid] = pcb[run_pid];
 	pcb[pid].state = READY;
