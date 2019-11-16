@@ -395,7 +395,7 @@ void SysVfork(void){
      page[DIR].u.entry[x] = KDir_ptr[x];
   }
   page[DIR].u.entry[256] = (page[IT].u.addr | PRESENT | RW);
-  page[DIR].u.entry[512] = (page[DT].u.addr | PRESENT | RW);
+  page[DIR].u.entry[511] = (page[DT].u.addr | PRESENT | RW);
 
   page[IT].u.entry[0] = (page[IP].u.addr | PRESENT | RO);       // build IT page
 
