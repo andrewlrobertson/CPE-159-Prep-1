@@ -20,11 +20,10 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
 
    //get 'pid'
    pid = DeQue(&avail_que);
-   pcb[pid].Dir = KDir;
    page[pid].pid = pid;
    //use a tool function to clear the content of PCB of process 'pid'
    Bzero((char *)&pcb[pid], sizeof(pcb_t));
-
+   pcb[pid].Dir = KDir;
    //set the state of the process 'pid' to READY
    pcb[pid].state = READY;
 
