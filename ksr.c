@@ -382,7 +382,7 @@ void SysVfork(void){
 
   for(x = 0; x < 5; x++){
      page[indices[x]].pid = pid;
-     Bzero((char*)page[indices[x]].u.addr, sizeof(PAGE_SIZE));
+     Bzero(page[indices[x]].u.content, sizeof(PAGE_SIZE));
   }
 
   DIR = indices[0];
@@ -401,7 +401,7 @@ void SysVfork(void){
 
   page[DT].u.entry[1023] = (page[DP].u.addr | PRESENT | RW);     // build DT page
 
-  MemCpy((char*)page[IP].u.addr, (char*)funct, PAGE_SIZE);      //build IP page
+  MemCpy(page[IP].u.content, (char*)funct, PAGE_SIZE);      //build IP page
 
   page[DP].u.entry[1023] = EF_DEFAULT_VALUE | EF_INTR;     //build DP page
   page[DP].u.entry[1022] = get_cs();
