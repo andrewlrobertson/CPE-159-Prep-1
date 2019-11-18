@@ -349,7 +349,7 @@ void SysVfork(void){
   i = 0;
   x = 0;
   funct = (func_p_t)pcb[run_pid].tf_p->ebx;
-  KDir_ptr = &KDir;
+  KDir_ptr = (unsigned *)KDir;
 
   pid = DeQue(&avail_que);
 	EnQue(pid, &ready_que);
