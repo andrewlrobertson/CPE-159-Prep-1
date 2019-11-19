@@ -93,18 +93,18 @@ void Shell(void){
 		sys_read(command);
 		// Following is a simple C program
 			if(StrCmp(command , "dir") == 0){
-          exit_pid = sys_wait(&exit_code);
 					sys_vfork(ShellDir);
+          exit_pid = sys_wait(&exit_code);
           VforkOutput(exit_code,exit_pid);
 			}
 			else if(StrCmp(command, "cal") == 0){
-          exit_pid = sys_wait(&exit_code);
 					sys_vfork(ShellCal);
+          exit_pid = sys_wait(&exit_code);
           VforkOutput(exit_code,exit_pid);
 			}
 			else if(StrCmp(command, "roll") == 0){
-					exit_pid = sys_wait(&exit_code);
 					sys_vfork(ShellRoll);
+          exit_pid = sys_wait(&exit_code);
           VforkOutput(exit_code,exit_pid);
 			}
 			else{
