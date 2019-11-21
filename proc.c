@@ -70,19 +70,7 @@ void ShellCal(void){
   sys_exit(0);
 }
 
-void VforkOutput(int exit_code, int exit_pid){
-  char str[STR_MAX];
-  char str2[STR_MAX];
-  Number2Str(exit_pid, str);
-  Number2Str(exit_code, str2);
-  sys_lock_mutex(VIDEO_MUTEX);
-  sys_write("Exited PID: ");
-  sys_write(str);
-  sys_write("   Exit Code: ");
-  sys_write(str2);
-  sys_write("\r");
-  sys_unlock_mutex(VIDEO_MUTEX);
-}
+void VforkOutput(int exit_code, int exit_pid);
 
 void Shell(void){
   char command[STR_MAX];
@@ -114,6 +102,20 @@ void Shell(void){
 				  sys_write("      roll -- roll a pair of die\r");
 			}
 	}
+}
+
+void VforkOutput(int exit_code, int exit_pid){
+  char str[STR_MAX];
+  char str2[STR_MAX];
+  Number2Str(exit_pid, str);
+  Number2Str(exit_code, str2);
+  sys_lock_mutex(VIDEO_MUTEX);
+  sys_write("Exited PID: ");
+  sys_write(str);
+  sys_write("   Exit Code: ");
+  sys_write(str2);
+  sys_write("\r");
+  sys_unlock_mutex(VIDEO_MUTEX);
 }
 
 void Login(void) {
