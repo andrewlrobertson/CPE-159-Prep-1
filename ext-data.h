@@ -19,4 +19,5 @@ extern mutex_t video_mutex;
 extern kb_t kb;
 extern unsigned KDir;
 extern page_t page[PAGE_MAX];
+extern tty_t tty;
 #endif

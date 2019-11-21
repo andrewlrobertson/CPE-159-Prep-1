@@ -24,6 +24,7 @@ unsigned sys_rand_count;
 kb_t kb;
 unsigned KDir;
 page_t page[PAGE_MAX];
+tty_t tty;
 
 struct i386_gate *idt;         // interrupt descriptor table
 
