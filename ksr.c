@@ -117,9 +117,9 @@ void TTYSR(void){
   set_cr3(pcb[pid].Dir);
 
   ch = *tty.str;
-  if (ch != '\0')
+  if (ch != '\0'){
     outportb(tty.port, ch);
-    tty.str++;
+    tty.str++;}
   else
     DeQue(&(tty.wait_que));
     EnQue(pid, &ready_que);
