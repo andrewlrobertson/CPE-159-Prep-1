@@ -55,6 +55,7 @@ void BootStrap(void) {         // set up kernel!
    //use fill_gate() to set entry # SYSCALL_EVENT to SyscallEntry
    fill_gate(&idt[SYSCALL_EVENT], (int)SyscallEntry, get_cs(), ACC_INTR_GATE, 0);
    //send PIC control register the mask value for timer handling
+	 fill_gate(&idt[TTY_EVENT], (int)TTYEntry, get_cs(), ACC_INTR_GATE, 0);
    outportb(PIC_MASK_REG, PIC_MASK_VAL);
 }
 
@@ -132,7 +133,7 @@ void Kernel(tf_t *tf_p) {       // kernel runs
       break;
 	case TTY_EVENT:
 	    TTYSR();
-			break; 
+			break;
 	default:
       cons_printf("Kernel Panic: no such event!\n");
       breakpoint();
