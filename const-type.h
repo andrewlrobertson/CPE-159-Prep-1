@@ -104,4 +104,11 @@ typedef struct{
    que_t buffer;
    que_t wait_que;
 } kb_t;
+
+typedef struct{
+   char *str;               // addr of string to print
+   que_t wait_que;          // requesting process
+   int port;                // set to TTY0/1/2
+} tty_t;
+
 #endif                          // to prevent name mangling
