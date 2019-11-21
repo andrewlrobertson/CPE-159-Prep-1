@@ -119,26 +119,38 @@ void SysWrite(void) {
   int offset;
 
   str = (char*)pcb[run_pid].tf_p->ebx;
-
-  while (*str != '\0'){
-    if(*str == '\r'){
-       offset = (sys_cursor-VIDEO_START) % 80;
-       sys_cursor -= offset;
-       sys_cursor += 80;
-    }
-    else{
-       *sys_cursor = *str + VGA_MASK_VAL;
-       sys_cursor++;
-    }
-    str++;
-    if(sys_cursor >= (VIDEO_END)){
-       sys_cursor = VIDEO_START;
-       while (sys_cursor < VIDEO_END){
-         *sys_cursor = ' ' + VGA_MASK_VAL;
-         sys_cursor++;
+  if(pcb[run_pid].STDOUT == CONSOLE){
+     while (*str != '\0'){
+       if(*str == '\r'){
+          offset = (sys_cursor-VIDEO_START) % 80;
+          sys_cursor -= offset;
+          sys_cursor += 80;
        }
-       sys_cursor = VIDEO_START;
-    }
+       else{
+          *sys_cursor = *str + VGA_MASK_VAL;
+          sys_cursor++;
+       }
+       str++;
+       if(sys_cursor >= (VIDEO_END)){
+          sys_cursor = VIDEO_START;
+          while (sys_cursor < VIDEO_END){
+            *sys_cursor = ' ' + VGA_MASK_VAL;
+            sys_cursor++;
+          }
+          sys_cursor = VIDEO_START;
+       }
+     }
+   }
+   else if(pcb[run_pid].STDOUT == TTY){
+     tty.str = str;
+     EnQue(run_pid, &(tty.wait_que));
+     pcb[run_pid].state = IO_WAIT;
+     run_pid = NONE;
+     TTYSR();
+   }
+  else{
+    cons_printf("NO SUCH DEVICE!\n");
+    breakpoint();
   }
 }
 
