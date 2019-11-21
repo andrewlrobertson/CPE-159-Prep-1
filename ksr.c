@@ -106,6 +106,26 @@ void KBSR(void){
    }
 }
 
+void TTYSR(void){
+  int pid;
+  char ch;
+  outportb(PIC_CONT_REG, TTY_SERVED_VAL);
+  if(QueEmpty(&(tty.wait_que))){
+    return;
+  }
+  pid = tty.wait_que.que[0];
+  set_cr3(pcb[pid].Dir);
+
+  ch = *tty.str;
+  if (ch != '\0')
+    outportb(tty.port, ch);
+    tty.str++;
+  else
+    DeQue(&(tty.wait_que));
+    EnQue(pid, &ready_que);
+    pcb[pid].state = READY;
+}
+
 void SysSleep(void) {
    int sleep_sec;
    sleep_sec = pcb[run_pid].tf_p->ebx;
@@ -302,7 +322,7 @@ void SysWait(void){
    else{
 	   pcb[run_pid].tf_p->ecx = cpid;
 	   //need to modify exit code here
-     set_cr3(pcb[cpid].Dir); 
+     set_cr3(pcb[cpid].Dir);
 	   *exit_code_ptr = pcb[cpid].tf_p->ebx;
 	   pcb[cpid].state = AVAIL;
      EnQue(cpid, &avail_que);
