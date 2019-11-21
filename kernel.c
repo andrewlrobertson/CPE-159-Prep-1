@@ -92,7 +92,7 @@ void TTYinit(void) {                // phase9
 int main(void) {               // OS starts
    //do the boot strap things 1st
    BootStrap();
-
+   TTYinit();
    SpawnSR(Idle);
    SpawnSR(Login);
    run_pid = IDLE;
