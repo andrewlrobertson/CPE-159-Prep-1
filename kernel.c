@@ -130,6 +130,9 @@ void Kernel(tf_t *tf_p) {       // kernel runs
 	case SYSCALL_EVENT:
       SyscallSR();       // all syscalls go here 1st
       break;
+	case TTY_EVENT:
+	    TTYSR();
+			break; 
 	default:
       cons_printf("Kernel Panic: no such event!\n");
       breakpoint();
