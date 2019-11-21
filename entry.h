@@ -10,6 +10,7 @@ __BEGIN_DECLS
 
 #include "const-type.h"    // tf_t below needs it
 
+void TTYEntry(void);
 void SyscallEntry(void);   //coded in entry.S
 void TimerEntry(void);     // coded in entry.S, assembler won't like this syntax
 void Loader(tf_t *);       // coded in entry.S

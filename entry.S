@@ -25,10 +25,22 @@ ENTRY(TimerEntry)           // push efl, cs, eip by hardware
    leal kstack+KSTACK_MAX, %esp  // so esp points to top of kernel stack
    push %ecx                // push (proc trapframe addr) there
    cld                      // clear direction flag bit
-   call CNAME(Kernel)       // call C function: void Kernel(given ecx value) { 
+   call CNAME(Kernel)       // call C function: void Kernel(given ecx value) {
 
 ENTRY(SyscallEntry)         // similar to TimerEntry
    pushl $128               // push event identifier
+   pusha
+   movl %esp, %ecx
+   movw $0x10, %ax
+   mov %ax, %ds
+   mov %ax, %es
+   leal kstack+KSTACK_MAX, %esp
+   push %ecx
+   cld
+   call CNAME(Kernel)
+
+ENTRY(TTYEntry)         // similar to TimerEntry
+   pushl $35               // push event identifier
    pusha
    movl %esp, %ecx
    movw $0x10, %ax
