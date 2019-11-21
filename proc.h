@@ -9,8 +9,8 @@ void MyChildExitHandler(void);
 void ShellDir(void);
 void ShellRoll(void);
 void ShellCal(void);
-void Shell(void);
 void VforkOutput(int exit_code, int exit_pid);
+void Shell(void);
 void Login(void);
 
 #endif
