@@ -51,18 +51,24 @@ void MemCpy(char *dst, char *src, unsigned int max){
 }
 
 void Number2Str(int x, char *str) {
-	int i = 0;
+  int i = 0;
   int stop, offset, end;
   char swap;
 
-	while(x != 0){
-		str[i] = x % 10 + 48;
-		x = x / 10;
-		i++;
-		if(x == 0){
-		str[i] = '\0';
-		}
-	}
+  if (x == 0){
+      str[0] = '0';
+      str[1] = '\0';
+      return;
+  }
+
+  while(x != 0){
+	  str[i] = x % 10 + 48;
+	  x = x / 10;
+	  i++;
+	  if(x == 0){
+	  str[i] = '\0';
+	  }
+  }
 
   if (i>1){
      end = i-1;
