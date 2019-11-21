@@ -53,6 +53,13 @@
 #define RW 0x02         //page is both read & writable
 #define RO 0x00         //page is read only
 
+#define CONSOLE 100             // phase9, for STDIN of Idle
+#define TTY 200                 // for STDIN of Shell and its children
+#define TTY_EVENT 35            // TTY0/2, use 36 for TTY1
+#define PIC_MASK_VAL ~0x09      // new mask: ~0..01001
+#define TTY_SERVED_VAL 0x63     // also for COM4, 0x64 for COM3
+#define TTY0 0x2f8              // TTY1 0x3e8, TTY2 0x2e8
+
 typedef void (*func_p_t)(void); // void-return function pointer type
 
 typedef enum {AVAIL, READY, RUN, SLEEP, SUSPEND, WAIT, ZOMBIE, IO_WAIT} state_t;
