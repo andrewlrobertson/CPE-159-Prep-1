@@ -302,7 +302,7 @@ void SysWait(void){
    else{
 	   pcb[run_pid].tf_p->ecx = cpid;
 	   //need to modify exit code here
-     set_cr3(pcb[cpid].Dir); //will be restored to real memory adressing @ end of SyscallSR
+     set_cr3(pcb[cpid].Dir); 
 	   *exit_code_ptr = pcb[cpid].tf_p->ebx;
 	   pcb[cpid].state = AVAIL;
      EnQue(cpid, &avail_que);
