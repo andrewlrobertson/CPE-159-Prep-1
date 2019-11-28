@@ -110,22 +110,26 @@ void KBSR(void){
    }
 }
 
-void TTYSR(void){
+void TTYdspSR(void){
   int pid;
   char ch;
-  outportb(PIC_CONT_REG, TTY_SERVED_VAL);
+  if(!QueEmpty(tty.echo)){
+    ch = (char)DeQue(&(tty.echo));
+    outportb(tty.port, ch);
+    return;
+  }
   if(QueEmpty(&(tty.wait_que))){
     return;
   }
-  pid = tty.wait_que.que[0];
+  pid = tty.dsp_wait_que.que[0];
   set_cr3(pcb[pid].Dir);
 
-  ch = *tty.str;
+  ch = *tty.dsp_str;
   if (ch != '\0'){
     outportb(tty.port, ch);
-    tty.str++;}
+    tty.dsp_str++;}
   else
-    DeQue(&(tty.wait_que));
+    DeQue(&(tty.dsp_wait_que));
     EnQue(pid, &ready_que);
     pcb[pid].state = READY;
 }
