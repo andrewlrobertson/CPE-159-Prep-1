@@ -23,4 +23,5 @@ void KBSR(void);
 void SysRead(void);
 void SysVfork(void);
 void TTYdspSR(void);
+void TTYSR(void);
 #endif
