@@ -22,5 +22,5 @@ void SysSignal(void);
 void KBSR(void);
 void SysRead(void);
 void SysVfork(void);
-void TTYSR(void);
+void TTYdspSR(void);
 #endif
