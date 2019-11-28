@@ -78,6 +78,7 @@ typedef struct{
    unsigned Dir;
    func_p_t signal_handler[32];
    int STDOUT;
+   int STDIN;
 } pcb_t;
 
 typedef struct{
