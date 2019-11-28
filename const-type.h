@@ -105,9 +105,12 @@ typedef struct{
 } kb_t;
 
 typedef struct{
-   char *str;               // addr of string to print
-   que_t wait_que;          // requesting process
-   int port;                // set to TTY0/1/2
+   char *dsp_str;           // string ptr (to display these chars)
+   que_t dsp_wait_que;      // processes wait for strings to get displayed
+   int port;                // 0x2f8 (COM2), 0x3e8 (COM3), 0x2e8 (COM4)
+   char *kb_str;            // string ptr (to get terminal input)
+   que_t kb_wait_que;       // processes wait for terminal input strings
+   que_t echo;              // input queued here to echo back to terminal
 } tty_t;
 
 #endif                          // to prevent name mangling
