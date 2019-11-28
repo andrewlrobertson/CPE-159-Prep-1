@@ -111,18 +111,18 @@ void KBSR(void){
 }
 
 void TTYSR(void){
-	/*
-	   TTYSR
-      1. send to PIC a TTY_SERVED_VAL (similar to what TimerSR does)
-      2. read the status of the Interrupt Indicator Register:
-            use inportb() to read from tty.port+IIR
-      3. if status is about terminal display (IIR_TXRDY):
-            call TTYdspSR() to handle it (previous phase)
-         else if status is about terminal keyboard (IIR_RXRDY):
-            call TTYkbSR() to handle for input, then
-            call TTYdspSR() to echo back if a char received from input
-         (else: do nothing. This syntax enforces 'status' be either above.)
-	*/
+   int status;
+   outportb(PIC_CONT_REG, TTY_SERVED_VAL);
+   status = inportb(tty.prrt+IIR);
+   if (status == IIR_TXRDY){
+      TTYdspSR();
+   }
+   else if (status == IIR_RXRDY){
+      TTYkbSR();
+      TTYdspSR();
+   }
+   else{    
+      //do nothing
 }
 
 void TTYdspSR(void){
