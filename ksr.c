@@ -166,11 +166,11 @@ void SysWrite(void) {
      }
    }
    else if(pcb[run_pid].STDOUT == TTY){
-     tty.str = str;
-     EnQue(run_pid, &(tty.wait_que));
+     tty.dsp_str = str;
+     EnQue(run_pid, &(tty.dsp_wait_que));
      pcb[run_pid].state = IO_WAIT;
      run_pid = NONE;
-     TTYSR();
+     TTYdspSR();
    }
   else{
     cons_printf("NO SUCH DEVICE!\n");
