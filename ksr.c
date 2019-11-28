@@ -367,16 +367,29 @@ void SysSignal(void){
 
 void SysRead(void){
   int ch;
-  if(!QueEmpty(&(kb.buffer))){
-    ch = DeQue(&(kb.buffer));
-    pcb[run_pid].tf_p->ebx = ch;
-  }
-  else{
-    EnQue(run_pid, &(kb.wait_que));
-    pcb[run_pid].state = IO_WAIT;
-    run_pid = NONE;
-  }
-}
+	
+  if(pcb[run_pid].STDIN == CONSOLE){
+	  	
+  	if(!QueEmpty(&(kb.buffer))){
+    	   ch = DeQue(&(kb.buffer));
+    	   pcb[run_pid].tf_p->ebx = ch;
+  	}
+  	else{
+    	   EnQue(run_pid, &(kb.wait_que));
+    	   pcb[run_pid].state = IO_WAIT;
+    	   run_pid = NONE;
+  	}
+   }
+   else if(pcb[run_pid].STDIN == TTY){
+	tty.kb_str = (char*)pcb[run_pid].tf_p->ebx;
+	pcb[run_pid].state = IO_WAIT;
+	EnQue(run_pid, &(tty.kb_wait_que));
+   }
+   else{
+	cons_printf("NO SUCH DEVICE");
+        breakpoint();
+   }
+
 
 void SysVfork(void){
   int DIR, IT, DT, IP, DP, x, i, pid;
