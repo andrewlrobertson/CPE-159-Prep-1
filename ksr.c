@@ -24,9 +24,11 @@ void SpawnSR(func_p_t p) {     // arg: where process code starts
    //use a tool function to clear the content of PCB of process 'pid'
    Bzero((char *)&pcb[pid], sizeof(pcb_t));
    if(pid == 0){
-     pcb[pid].STDOUT = CONSOLE;}
+     pcb[pid].STDOUT = CONSOLE;
+     pcb[pid].STDIN = CONSOLE;}
    else{
-     pcb[pid].STDOUT = TTY;}
+     pcb[pid].STDOUT = TTY;
+     pcb[pid].STDIN = TTY;}
    pcb[pid].Dir = KDir;
    //set the state of the process 'pid' to READY
    pcb[pid].state = READY;
