@@ -110,30 +110,15 @@ void KBSR(void){
    }
 }
 
-void TTYSR(void){
-   int status;
-   outportb(PIC_CONT_REG, TTY_SERVED_VAL);
-   status = inportb(tty.port+IIR);
-   if (status == IIR_TXRDY){
-      TTYdspSR();
-   }
-   else if (status == IIR_RXRDY){
-      TTYkbSR();
-      TTYdspSR();
-   }
-   else{
-      //do nothing
-}
-
 void TTYdspSR(void){
   int pid;
   char ch;
-  if(!QueEmpty(tty.echo)){
+  if(!QueEmpty(&(tty.echo))){
     ch = (char)DeQue(&(tty.echo));
     outportb(tty.port, ch);
     return;
   }
-  if(QueEmpty(&(tty.wait_que))){
+  if(QueEmpty(&(tty.dsp_wait_que))){
     return;
   }
   pid = tty.dsp_wait_que.que[0];
@@ -156,19 +141,36 @@ void TTYkbSR(void){
   if (QueEmpty(&(tty.kb_wait_que))){
     return;
   }
-  EnQue((int) ch, &(tty.buffer));
+  EnQue((int) ch, &(kb.buffer));
   set_cr3(pcb[tty.kb_wait_que.que[0]].Dir);
-  if(StrCmp(&ch, '\r') != 0){
+  if(StrCmp(&ch, "\r") != 0){
     *tty.kb_str = ch;
     tty.kb_str++;
   }
   else{
     EnQue((int)'\n', &(tty.echo));
     *tty.kb_str = '\0';
-    pid = DeQue((&(tty.kb_wait_que));
+    pid = DeQue((&(tty.kb_wait_que)));
     pcb[pid].state = READY;
     EnQue(pid, &ready_que);
   }
+}
+
+
+void TTYSR(void){
+   int status;
+   outportb(PIC_CONT_REG, TTY_SERVED_VAL);
+   status = inportb(tty.port+IIR);
+   if (status == IIR_TXRDY){
+      TTYdspSR();
+   }
+   else if (status == IIR_RXRDY){
+      TTYkbSR();
+      TTYdspSR();
+   }
+   else{
+      //do nothing
+   }
 }
 
 void SysSleep(void) {
@@ -420,7 +422,7 @@ void SysRead(void){
     	   pcb[run_pid].state = IO_WAIT;
     	   run_pid = NONE;
   	}
-   }
+  }
    else if(pcb[run_pid].STDIN == TTY){
 	tty.kb_str = (char*)pcb[run_pid].tf_p->ebx;
 	pcb[run_pid].state = IO_WAIT;
@@ -430,7 +432,7 @@ void SysRead(void){
 	cons_printf("NO SUCH DEVICE");
         breakpoint();
    }
-
+}
 
 void SysVfork(void){
   int DIR, IT, DT, IP, DP, x, i, pid;
