@@ -152,27 +152,13 @@ void sys_kill(int pid, int signal_name) {
 }
 
 void sys_read(char *str){
-     char ch;
-     char small[2];
-     int i;
-     i = 0;
-     while( i < (STR_MAX - 1)){
-       while(QueEmpty(&kb.buffer))sys_sleep(1);
-       ch = DeQue(&kb.buffer);
-       small[0] = ch;
-       small[1] = '\0';
-       sys_write(small);
-       if (ch == '\r'){
-         *str = '\0';
-         return;
-       }
-       *str = ch;
-       i++;
-       str++;
-       if (i == STR_MAX - 1){
-         *str = '\0';
-       }
-     }
+  asm("movl %0, %%eax;
+       movl %1, %%ebx;          // str
+       int $128"
+      :
+      : "g" (SYS_READ), "g" (str)
+      : "eax", "ebx"
+  );
 }
 
 void sys_vfork(func_p_t p) {
