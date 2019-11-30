@@ -113,7 +113,7 @@ void KBSR(void){
 void TTYSR(void){
    int status;
    outportb(PIC_CONT_REG, TTY_SERVED_VAL);
-   status = inportb(tty.prrt+IIR);
+   status = inportb(tty.port+IIR);
    if (status == IIR_TXRDY){
       TTYdspSR();
    }
@@ -121,7 +121,7 @@ void TTYSR(void){
       TTYkbSR();
       TTYdspSR();
    }
-   else{    
+   else{
       //do nothing
 }
 
@@ -147,6 +147,28 @@ void TTYdspSR(void){
     DeQue(&(tty.dsp_wait_que));
     EnQue(pid, &ready_que);
     pcb[pid].state = READY;
+}
+
+void TTYkbSR(void){
+  char ch;
+  int pid;
+  ch = inportb(tty.port);
+  if (QueEmpty(&(tty.kb_wait_que))){
+    return;
+  }
+  EnQue((int) ch, &(tty.buffer));
+  set_cr3(pcb[tty.kb_wait_que.que[0]].Dir);
+  if(StrCmp(&ch, '\r') != 0){
+    *tty.kb_str = ch;
+    tty.kb_str++;
+  }
+  else{
+    EnQue((int)'\n', &(tty.echo));
+    *tty.kb_str = '\0';
+    pid = DeQue((&(tty.kb_wait_que));
+    pcb[pid].state = READY;
+    EnQue(pid, &ready_que);
+  }
 }
 
 void SysSleep(void) {
@@ -386,9 +408,9 @@ void SysSignal(void){
 
 void SysRead(void){
   int ch;
-	
+
   if(pcb[run_pid].STDIN == CONSOLE){
-	  	
+
   	if(!QueEmpty(&(kb.buffer))){
     	   ch = DeQue(&(kb.buffer));
     	   pcb[run_pid].tf_p->ebx = ch;
