@@ -94,7 +94,7 @@ int main(void) {               // OS starts
    BootStrap();
    TTYinit();
    SpawnSR(Idle);
-   //SpawnSR(Login);
+   SpawnSR(Login);
    run_pid = IDLE;
    //call Loader() to load the trapframe of Idle
    set_cr3(pcb[run_pid].Dir);
