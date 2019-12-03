@@ -128,10 +128,11 @@ void TTYdspSR(void){
   if (ch != '\0'){
     outportb(tty.port, ch);
     tty.dsp_str++;}
-  else
+  else{
     DeQue(&(tty.dsp_wait_que));
     EnQue(pid, &ready_que);
     pcb[pid].state = READY;
+  }
 }
 
 void TTYkbSR(void){
