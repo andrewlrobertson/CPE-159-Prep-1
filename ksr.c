@@ -429,6 +429,7 @@ void SysRead(void){
 	tty.kb_str = (char*)pcb[run_pid].tf_p->ebx;
 	pcb[run_pid].state = IO_WAIT;
 	EnQue(run_pid, &(tty.kb_wait_que));
+        run_pid = NONE;
    }
    else{
 	cons_printf("NO SUCH DEVICE");
