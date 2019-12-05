@@ -142,9 +142,10 @@ void TTYkbSR(void){
   if (QueEmpty(&(tty.kb_wait_que))){
     return;
   }
-  EnQue((int) ch, &(kb.buffer));
+  EnQue((int) ch, &(kb.echo));
   set_cr3(pcb[tty.kb_wait_que.que[0]].Dir);
-  if(StrCmp(&ch, "\r") != 0){
+ // if(StrCmp(&ch, "\r") != 0){
+    if(ch != '\r'){
     *tty.kb_str = ch;
     tty.kb_str++;
   }
