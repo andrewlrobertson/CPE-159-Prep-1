@@ -44,7 +44,14 @@ void MyChildExitHandler(void){
 
 void ShellDir(void){
   sys_lock_mutex(VIDEO_MUTEX);
-	sys_write("/boot/\r");
+  sys_write("  drw-  4096 ./\r\n");
+  sys_write("  drw-  4096 ../\r\n");
+  sys_write("  -rw-  4489 kernel.c\r\n");
+  sys_write("  -rw- 14311 ksr.c\r\n");
+  sys_write("  -rw-   520 ksr.h\r\n");
+  sys_write("  -rw-  5186 proc.c\r\n");
+  sys_write("  -rw-   267 proc.h\r\n");
+  sys_write("  -rwx   644 spede.h\r\n");
   sys_unlock_mutex(VIDEO_MUTEX);
   sys_exit(0);
 }
@@ -58,14 +65,13 @@ void ShellRoll(void){
 
 void ShellCal(void){
   sys_lock_mutex(VIDEO_MUTEX);
-	sys_write("\r");
-  sys_write("      November 2019\r");
-  sys_write("   Su Mo Tu We Th Fr Sa\r");
-  sys_write("                   1  2\r");
-  sys_write("    3  4  5  6  7  8  9\r");
-  sys_write("   10 11 12 13 14 15 16\r");
-  sys_write("   17 18 19 20 21 22 23\r");
-  sys_write("   24 25 26 27 28 29 30\r");
+  sys_write("      November 2019\r\n");
+  sys_write("   Su Mo Tu We Th Fr Sa\r\n");
+  sys_write("                   1  2\r\n");
+  sys_write("    3  4  5  6  7  8  9\r\n");
+  sys_write("   10 11 12 13 14 15 16\r\n");
+  sys_write("   17 18 19 20 21 22 23\r\n");
+  sys_write("   24 25 26 27 28 29 30\r\n");
   sys_unlock_mutex(VIDEO_MUTEX);
   sys_exit(0);
 }
@@ -77,8 +83,10 @@ void Shell(void){
 	int exit_code;
   int exit_pid;
 	while(1){
+                sys_write("\r\n");
 		sys_write("smooth_operators>");
 		sys_read(command);
+                sys_write("\r\n");
 		// Following is a simple C program
 			if(StrCmp(command , "dir") == 0){
 					sys_vfork(ShellDir);
@@ -96,10 +104,10 @@ void Shell(void){
           VforkOutput(exit_code,exit_pid);
 			}
 			else{
-					sys_write("\r   Valid commands are:\r");
-				  sys_write("      dir -- displays directory content\r");
-					sys_write("      cal -- displays calendar\r");
-				  sys_write("      roll -- roll a pair of die\r");
+					sys_write("   Valid commands are:\r\n");
+				  sys_write("      dir -- displays directory content\r\n");
+					sys_write("      cal -- displays calendar\r\n");
+				  sys_write("      roll -- roll a pair of die\r\n");
 			}
 	}
 }
@@ -114,7 +122,7 @@ void VforkOutput(int exit_code, int exit_pid){
   sys_write(str);
   sys_write("   Exit Code: ");
   sys_write(str2);
-  sys_write("\r");
+  sys_write("\r\n");
   sys_unlock_mutex(VIDEO_MUTEX);
 }
 
@@ -124,11 +132,13 @@ void Login(void) {
       while(1) {
          sys_write("login:");
          sys_read(login_str);
+         sys_write("\r\n");
          sys_write("password:");
          sys_read(passwd_str);
+         sys_write("\r\n");
 
          if (StrCmp(login_str, passwd_str) == 0){
-           sys_write("login successful!\r");  // break; in next prep
+           sys_write("login successful!\r\n");  // break; in next prep
 	         sys_vfork(Shell);  // virtual-fork Shell (virtual memeory) phase8
 	         break;
          }
